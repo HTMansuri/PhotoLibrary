@@ -14,13 +14,13 @@
             <Font size="24.0" />
          </font>
       </Text>
-      <ListView layoutX="28.0" layoutY="63.0" prefHeight="535.0" prefWidth="398.0" />
+      <ListView layoutX="28.0" layoutY="128.0" prefHeight="470.0" prefWidth="398.0" />
       <Button layoutX="748.0" layoutY="16.0" mnemonicParsing="false" prefHeight="24.0" prefWidth="82.0" text="Logout" textFill="RED">
          <font>
             <Font size="18.0" />
          </font>
       </Button>
-      <Text layoutX="511.0" layoutY="113.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Let's manage albums:" wrappingWidth="233.8787841796875">
+      <Text layoutX="511.0" layoutY="154.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Let's manage albums:" wrappingWidth="233.8787841796875">
          <font>
             <Font size="24.0" />
          </font>
@@ -72,6 +72,16 @@
          </font>
       </Text>
       <Button layoutX="14.0" layoutY="15.0" mnemonicParsing="false" prefHeight="24.0" prefWidth="82.0" text="Back" textFill="#007bff">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Button>
+      <TextField layoutX="205.0" layoutY="64.0" prefHeight="39.0" prefWidth="308.0" promptText="Tag Pairs / Date Range">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </TextField>
+      <Button layoutX="527.0" layoutY="64.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="138.0" text="Search Photos">
          <font>
             <Font size="18.0" />
          </font>
