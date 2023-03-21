@@ -63,7 +63,7 @@
             <Font size="14.0" />
          </font>
       </Button>
-      <Button layoutX="682.0" layoutY="271.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="87.0" text="Re-caption">
+      <Button layoutX="682.0" layoutY="271.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="143.0" text="Caption/Re-caption">
          <font>
             <Font size="14.0" />
          </font>
