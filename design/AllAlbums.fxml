@@ -9,7 +9,7 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="627.0" prefWidth="845.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <Text fill="#227337" layoutX="236.0" layoutY="45.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Welcome back, User!!!" textAlignment="CENTER" wrappingWidth="398.3805847167969">
+      <Text fill="#227337" layoutX="236.0" layoutY="45.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Welcome &lt;username&gt;!!!" textAlignment="CENTER" wrappingWidth="398.3805847167969">
          <font>
             <Font size="24.0" />
          </font>
@@ -71,11 +71,6 @@
             <Font size="18.0" />
          </font>
       </Text>
-      <Button layoutX="14.0" layoutY="15.0" mnemonicParsing="false" prefHeight="24.0" prefWidth="82.0" text="Back" textFill="#007bff">
-         <font>
-            <Font size="18.0" />
-         </font>
-      </Button>
       <TextField layoutX="205.0" layoutY="64.0" prefHeight="39.0" prefWidth="308.0" promptText="Tag Pairs / Date Range">
          <font>
             <Font size="18.0" />
