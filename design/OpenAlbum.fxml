@@ -12,7 +12,7 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="627.0" prefWidth="845.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <Text fill="#227337" layoutX="236.0" layoutY="45.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Welcome &lt;username&gt;!!!" textAlignment="CENTER" wrappingWidth="398.3805847167969">
+      <Text fill="#227337" layoutX="236.0" layoutY="45.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Welcome, user!!!" textAlignment="CENTER" wrappingWidth="398.3805847167969">
          <font>
             <Font size="24.0" />
          </font>
@@ -58,12 +58,12 @@
             <Font size="14.0" />
          </font>
       </Button>
-      <Button layoutX="682.0" layoutY="227.0" mnemonicParsing="false" prefHeight="24.0" prefWidth="111.0" text="Remove Photo">
+      <Button layoutX="682.0" layoutY="219.0" mnemonicParsing="false" prefHeight="24.0" prefWidth="111.0" text="Remove Photo">
          <font>
             <Font size="14.0" />
          </font>
       </Button>
-      <Button layoutX="682.0" layoutY="271.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="143.0" text="Caption/Re-caption">
+      <Button layoutX="682.0" layoutY="263.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="143.0" text="Caption/Re-caption">
          <font>
             <Font size="14.0" />
          </font>
@@ -73,12 +73,7 @@
             <Font size="14.0" />
          </font>
       </Button>
-      <Button layoutX="682.0" layoutY="136.0" mnemonicParsing="false" prefHeight="5.0" prefWidth="102.0" text="Move Photo">
-         <font>
-            <Font size="14.0" />
-         </font>
-      </Button>
-      <Button layoutX="682.0" layoutY="182.0" mnemonicParsing="false" prefHeight="24.0" prefWidth="94.0" text="Copy Photo">
+      <Button layoutX="682.0" layoutY="157.0" mnemonicParsing="false" prefHeight="6.0" prefWidth="58.0" text="Move">
          <font>
             <Font size="14.0" />
          </font>
@@ -111,6 +106,11 @@
             <Font size="14.0" />
          </font>
       </Button>
-      <ChoiceBox layoutX="682.0" layoutY="107.0" prefHeight="26.0" prefWidth="135.0" />
+      <ChoiceBox layoutX="682.0" layoutY="128.0" prefHeight="26.0" prefWidth="135.0" />
+      <Button layoutX="760.0" layoutY="157.0" mnemonicParsing="false" prefHeight="6.0" prefWidth="58.0" text="Copy">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Button>
    </children>
 </AnchorPane>
