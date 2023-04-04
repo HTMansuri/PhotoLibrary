@@ -19,7 +19,7 @@
          </font>
       </Text>
       <TextField fx:id="userName" layoutX="362.0" layoutY="271.0" prefHeight="35.0" prefWidth="245.0" />
-      <Button layoutX="516.0" layoutY="320.0" mnemonicParsing="false" onAction="#Login" prefHeight="24.0" prefWidth="91.0" text="Login">
+      <Button fx:id="loginButton" layoutX="516.0" layoutY="320.0" mnemonicParsing="false" onAction="#Login" prefHeight="24.0" prefWidth="91.0" text="Login">
          <font>
             <Font size="18.0" />
          </font>

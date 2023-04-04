@@ -5,14 +5,24 @@ import java.util.*;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.stage.Stage;
 
 public class LoginController 
 {
     @FXML
     private TextField userName;
-    private static File admin = new File("admin.txt");
-    private static File user = new File("user.txt");
+    
+    @FXML
+    private Button loginButton;
+    
+    private static File admin = new File("src/photos/data/admin.txt");
+    private static File user = new File("src/photos/data/user.txt");
     
     public void start()
     {
@@ -24,7 +34,7 @@ public class LoginController
 				writer.write("admin\nstock\n");
 				writer.close();
 			}
-		} 
+		}
 		catch(IOException e)
 		{
 			e.printStackTrace();
@@ -50,6 +60,8 @@ public class LoginController
     void Login(ActionEvent event)
     {
     	String userCred = userName.getText();
+    	boolean flag = false;
+    	
     	try(Scanner sc = new Scanner(admin))
     	{
 			while(sc.hasNext())
@@ -57,9 +69,50 @@ public class LoginController
 				String user = sc.nextLine();
 				if(user.equals(userCred))
 				{
-					System.out.println("Logged In: " + userCred);
+					flag = true;
+					//admin
+					Stage mainStage = (Stage)loginButton.getScene().getWindow();
+					if(userCred.equals("admin"))
+			    	{
+			            try
+			            {
+							Parent admin = FXMLLoader.load(getClass().getResource("../design/admin.fxml"));
+					        Scene adminScene = new Scene(admin);
+					        mainStage.setScene(adminScene);
+					        mainStage.show();
+			            }
+			            catch (IOException e) 
+			            {
+							e.printStackTrace();
+						}
+			            break;
+			    	}
+					else //user
+					{
+						try
+			            {
+							Parent allAlbums = FXMLLoader.load(getClass().getResource("../design/AllAlbums.fxml"));
+					        Scene allAlbumsScene = new Scene(allAlbums);
+					        mainStage.setScene(allAlbumsScene);
+					        mainStage.show();
+			            }
+			            catch (IOException e) 
+			            {
+							e.printStackTrace();
+						}
+						break;
+					}
 				}
 			}
+			
+			if(!flag)
+			{
+				Alert alert = new Alert(Alert.AlertType.ERROR);
+				alert.setTitle("Invalid Credentials!!!");
+				alert.setHeaderText("Either the user doesn't exist or the credentails are incorrect!!!");
+				alert.showAndWait();
+			}
+			
 			sc.close();
 		}
     	catch(FileNotFoundException e)
