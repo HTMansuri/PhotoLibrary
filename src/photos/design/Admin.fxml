@@ -30,7 +30,7 @@
             <Font size="24.0" />
          </font>
       </Text>
-      <TextField layoutX="574.0" layoutY="186.0" onAction="#userName" prefHeight="35.0" prefWidth="245.0" />
+      <TextField fx:id="userName" layoutX="574.0" layoutY="186.0" prefHeight="35.0" prefWidth="245.0" />
       <Button layoutX="492.0" layoutY="247.0" mnemonicParsing="false" onAction="#create" prefHeight="24.0" prefWidth="91.0" text="Create">
          <font>
             <Font size="18.0" />

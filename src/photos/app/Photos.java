@@ -7,7 +7,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-import photos.control.LoginController;
+import photos.control.LoginControllerDummy;
 
 public class Photos extends Application 
 {
@@ -25,7 +25,7 @@ public class Photos extends Application
 			AnchorPane root = loader.load();
 			Scene scene = new Scene(root);
 			
-			LoginController loginController = loader.getController();
+			LoginControllerDummy loginController = loader.getController();
 			loginController.start();
 			
 			mainStage.setScene(scene);
