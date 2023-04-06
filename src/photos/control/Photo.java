@@ -1,6 +1,8 @@
 package photos.control;
 
-public class Photo
+import java.io.Serializable;
+
+public class Photo implements Serializable
 {
 	private String photoName;
 	private String imagePath;

@@ -7,7 +7,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-import photos.control.LoginControllerDummy;
+import photos.control.LoginController;
+import photos.control.UserDataController;
 
 public class Photos extends Application 
 {
@@ -16,23 +17,26 @@ public class Photos extends Application
 	@Override
 	public void start(Stage primaryStage) throws Exception
 	{
-		// TODO Auto-generated method stub
 		mainStage = primaryStage;
 		try
 		{
+			UserDataController.readFromAFile();
 			FXMLLoader loader = new FXMLLoader();
 			loader.setLocation(getClass().getResource("../design/Login.fxml"));
 			AnchorPane root = loader.load();
 			Scene scene = new Scene(root);
 			
-			LoginControllerDummy loginController = loader.getController();
+			LoginController loginController = loader.getController();
 			loginController.start();
 			
 			mainStage.setScene(scene);
-			mainStage.setTitle("Calculator");
+			mainStage.setTitle("Photos");
 			mainStage.setResizable(false);
 			mainStage.show();
-		} 
+			
+			UserDataController userData = UserDataController.getInstance();
+			userData.writeToAFile();
+		}
 		catch (IOException e) 
 		{
 			e.printStackTrace();
@@ -41,7 +45,6 @@ public class Photos extends Application
 
 	public static void main(String[] args)
 	{
-		// TODO Auto-generated method stub
 		launch(args);
 	}
 }
