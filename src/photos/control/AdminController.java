@@ -5,7 +5,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 
-public class AdminController 
+public class AdminController
 {
     @FXML
     private ListView<String> adminList;
@@ -16,7 +16,7 @@ public class AdminController
     @FXML
     void create(ActionEvent event)
     {
-
+    	
     }
 
     @FXML

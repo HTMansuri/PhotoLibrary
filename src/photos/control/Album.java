@@ -1,7 +1,8 @@
 package photos.control;
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Album
+public class Album implements Serializable
 {
 	private ArrayList<Photo> photos = new ArrayList<>();
 	private String albumName;
