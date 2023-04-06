@@ -34,8 +34,9 @@ public class Photos extends Application
 			mainStage.setResizable(false);
 			mainStage.show();
 			
-			UserDataController userData = UserDataController.getInstance();
-			userData.writeToAFile();
+			//still need changes catch upon exiting
+			//UserDataController userData = UserDataController.getInstance();
+			//userData.writeToAFile();
 		}
 		catch (IOException e) 
 		{

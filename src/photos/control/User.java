@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 public class User implements Serializable
 {
+	private static final long serialVersionUID = 2L;
 	private String userName;
 	private ArrayList<Album> album = new ArrayList<>();
 	
@@ -17,9 +18,13 @@ public class User implements Serializable
 		userName = nm;
 	}
 	
-	public String setUserName(String nm)
+	public void setUserName(String nm)
 	{
 		userName = nm;
+	}
+	
+	public String getUserName()
+	{
 		return userName;
 	}
 	

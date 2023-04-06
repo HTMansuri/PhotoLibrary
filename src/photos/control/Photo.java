@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 public class Photo implements Serializable
 {
+	private static final long serialVersionUID = 3L;
 	private String photoName;
 	private String imagePath;
 	
@@ -22,8 +23,19 @@ public class Photo implements Serializable
 	{
 		photoName = nm;
 	}
+	
+	public String getPhotoName()
+	{
+		return photoName;
+	}
+	
 	public void setImagePath(String ip)
 	{
 		imagePath = ip;
+	}
+	
+	public String getImagePath()
+	{
+		return imagePath;
 	}
 }

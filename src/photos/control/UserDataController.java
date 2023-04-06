@@ -5,6 +5,7 @@
 
 package photos.control;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -15,6 +16,7 @@ import java.util.ArrayList;
 
 public class UserDataController implements Serializable
 {
+	private static final long serialVersionUID = 1L;
 	private static UserDataController instance = null;
 	private ArrayList<User> users;
 	
@@ -32,26 +34,56 @@ public class UserDataController implements Serializable
 		return instance;
 	}
 	
+	public void addUser(User u)
+	{
+		users.add(u);
+	}
+	
+	public boolean containsUser(String u)
+	{
+		for(User user: users)
+		{
+			if(user.getUserName().equals(u))
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+	
 	public static UserDataController readFromAFile()
 	{
 		UserDataController loadUsers = UserDataController.getInstance();
-		
-		try(ObjectInputStream ois = new ObjectInputStream(new FileInputStream("../data/users.ser")))
+		File file = new File("src/photos/data/users.ser");
+		try(ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file)))
 		{
-	        ArrayList<User> userList = (ArrayList<User>)ois.readObject();
-	        loadUsers.users = userList;
+			if(file.length() == 0)
+			{
+				//
+			}
+			else
+			{
+				Object o = ois.readObject();
+				if(o instanceof ArrayList<?>)
+				{
+					@SuppressWarnings("unchecked")
+					ArrayList<User> userList = (ArrayList<User>) o;
+					loadUsers.users = userList;
+				}
+			}
 	    }
 		catch(Exception e)
 		{
-	        e.printStackTrace();
+	        //
 	    }
 		
 		return loadUsers;
 	}
 	
+	//still need to work on it
 	public void writeToAFile()
 	{
-		try(ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("../data/users.ser")))
+		try(ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("src/photos/data/users.ser")))
 		{
             oos.writeObject(users);
         }
