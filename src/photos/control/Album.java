@@ -32,4 +32,14 @@ public class Album implements Serializable
 	{
 		photos.add(p);
 	}
+	
+	public int PhotosNum(Album a)
+	{
+		return a.getPhotoList().size();
+	}
+	
+	public ArrayList<Photo> getPhotoList()
+	{
+		return photos;
+	}
 }

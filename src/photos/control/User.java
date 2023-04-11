@@ -2,6 +2,7 @@ package photos.control;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 public class User implements Serializable
 {
@@ -31,5 +32,34 @@ public class User implements Serializable
 	public void addAlbum(Album a)
 	{
 		album.add(a);
+	}
+	
+	public void removeAlbum(String selectedAlbum) 
+	{
+	    Iterator<Album> iterator = album.iterator();
+	    while(iterator.hasNext())
+	    {
+	        Album a = iterator.next();
+	        if(a.getAlbumName().equals(selectedAlbum))
+	        {
+	            iterator.remove();
+	        }
+	    }
+	}
+	
+	public void renameAlbum(String previousName, String newName)
+	{
+		for(Album a: album)
+		{
+			if(a.getAlbumName().equals(previousName))
+			{
+				a.setAlbumName(newName);
+			}
+		}
+	}
+	
+	public ArrayList<Album> getAlbumList()
+	{
+		return album;
 	}
 }

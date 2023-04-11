@@ -3,12 +3,14 @@ package photos.app;
 import java.io.IOException;
 
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import photos.control.LoginController;
-import photos.control.UserDataController;
 
 public class Photos extends Application 
 {
@@ -34,9 +36,17 @@ public class Photos extends Application
 			mainStage.setResizable(false);
 			mainStage.show();
 			
-			//still need changes catch upon exiting
-			//UserDataController userData = UserDataController.getInstance();
-			//userData.writeToAFile();
+			primaryStage.setOnCloseRequest(event -> {
+	            event.consume();
+	            Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you want to exit?", ButtonType.YES, ButtonType.CANCEL);
+	            alert.showAndWait();
+	            if(alert.getResult() == ButtonType.YES)
+	            {
+	    			UserDataController userData = UserDataController.getInstance();
+	    			userData.writeToAFile();
+	                Platform.exit();
+	            }
+	        });
 		}
 		catch (IOException e) 
 		{

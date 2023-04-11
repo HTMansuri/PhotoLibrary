@@ -1,47 +1,25 @@
-//why initializable?
-//user login not working
-
 package photos.control;
 
 import java.io.*;
-import java.net.URL;
-import java.util.*;
-
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import photos.app.UserDataController;
 
-public class LoginController implements Initializable
+public class LoginController
 {
     @FXML
     private TextField userName;
     
     public void start()
     {
-    	User stock = new User("stock");
-    	UserDataController userData = UserDataController.getInstance();
-    	userData.addUser(stock);
-    	//Album stockAlbum = new Album("stock");
-    	//stock.addAlbum(stockAlbum); //this won't find
     	
-//    	Photo p1 = new Photo("stockphoto1", "../data/stockphoto1");
-//    	Photo p2 = new Photo("stockphoto2", "../data/stockphoto1");
-//    	Photo p3 = new Photo("stockphoto3", "../data/stockphoto1");
-//    	Photo p4 = new Photo("stockphoto4", "../data/stockphoto1");
-//    	Photo p5 = new Photo("stockphoto5", "../data/stockphoto1");
-//    	
-//    	stockAlbum.addPhotos(p1);
-//    	stockAlbum.addPhotos(p2);
-//    	stockAlbum.addPhotos(p3);
-//    	stockAlbum.addPhotos(p4);
-//    	stockAlbum.addPhotos(p5);
 	}
     
 	@FXML
@@ -70,12 +48,22 @@ public class LoginController implements Initializable
     		{
     			try
                 {
-    				Parent allAlbums = FXMLLoader.load(getClass().getResource("../design/AllAlbums.fxml"));
-    		        Scene allAlbumsScene = new Scene(allAlbums);
-    		        Stage mainStage = (Stage) userName.getScene().getWindow();
-    		        mainStage.setScene(allAlbumsScene);
+//    				Parent allAlbums = FXMLLoader.load(getClass().getResource("../design/AllAlbums.fxml"));
+//    		        Scene allAlbumsScene = new Scene(allAlbums);
+//    		        Stage mainStage = (Stage) userName.getScene().getWindow();
+//    		        mainStage.setScene(allAlbumsScene);
+    				FXMLLoader loader = new FXMLLoader(getClass().getResource("../design/AllAlbums.fxml"));
+    				Parent allAlbums = loader.load();
+    				AllAlbumsController controller = loader.getController();
+    				Scene allAlbumsScene = new Scene(allAlbums);
+    				
+    				userData.setCurrentSessionUser(user);
+    				
+    				controller.start(); // Call the start method on the controller instance
+    				Stage mainStage = (Stage) userName.getScene().getWindow();
+    				mainStage.setScene(allAlbumsScene);
                 }
-                catch (IOException e) 
+                catch (Exception e) 
                 {
     				e.printStackTrace();
     			}
@@ -93,10 +81,4 @@ public class LoginController implements Initializable
     		alert.showAndWait();
     	}
     }
-    
-	@Override
-	public void initialize(URL arg0, ResourceBundle arg1)
-	{
-		
-	}
 }
