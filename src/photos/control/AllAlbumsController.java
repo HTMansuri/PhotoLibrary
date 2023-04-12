@@ -1,4 +1,5 @@
 //disappear buttons when no photo in list - optional or add alerts
+//error handling left for rename and delete if no albums
 package photos.control;
 
 import java.util.ArrayList;
@@ -32,7 +33,7 @@ public class AllAlbumsController
 {
     @FXML
     private ListView<String> allAlbumsList;
-    private ObservableList<String> albums;
+    public static ObservableList<String> albums;
     
     @FXML
     private VBox displayAlbumDetails;
@@ -120,7 +121,7 @@ public class AllAlbumsController
     	                Parent openAlbum = loader.load();
     	                OpenAlbumController controller = loader.getController();
     	                Scene allAlbumsScene = new Scene(openAlbum);
-    	                controller.start(albums);
+    	                controller.start();
     	                Stage mainStage = (Stage) allAlbumsList.getScene().getWindow();
     	                mainStage.setScene(allAlbumsScene);
     	            }

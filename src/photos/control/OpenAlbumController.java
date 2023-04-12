@@ -43,10 +43,9 @@ public class OpenAlbumController
     @FXML
     private ChoiceBox<String> dropDownMoveCopy;
 
-
 	private ObservableList<String> photos;
 	
-    public void start(ObservableList<String> albums)
+    public void start()
 	{
     	allPhotosList.setCellFactory(new Callback<ListView<String>, ListCell<String>>()
     	{
@@ -129,8 +128,8 @@ public class OpenAlbumController
     	}
     	
     	dropDownMoveCopy.getItems().add(0, "Please Select");
-    	albums.remove(currentAlbum.getAlbumName());
-    	dropDownMoveCopy.getItems().addAll(albums);
+    	AllAlbumsController.albums.remove(currentAlbum.getAlbumName());
+    	dropDownMoveCopy.getItems().addAll(AllAlbumsController.albums);
     	dropDownMoveCopy.getSelectionModel().selectFirst();
    	}
     
@@ -436,5 +435,39 @@ public class OpenAlbumController
 				}
 			}
 		}
+    }
+    
+    @FXML
+    public void slideShow(ActionEvent event)
+    {
+    	try
+    	{
+    		Album a = User.getCurrentSessionAlbum();
+        	ArrayList<Photo> photos = a.getPhotoList();
+        	if(photos.isEmpty())
+        	{
+        		Alert confirm1 = new Alert(Alert.AlertType.ERROR);
+	    		confirm1.setTitle("Not Available!!!");
+	    		confirm1.setContentText("There are no photos in this album to start slideshow!!!");
+	    		confirm1.setHeaderText(null);
+	    		confirm1.setResizable(false);
+	    		confirm1.getButtonTypes().setAll(ButtonType.OK);
+	    		confirm1.showAndWait();
+        	}
+        	else
+        	{
+        		FXMLLoader loader = new FXMLLoader(getClass().getResource("../design/Slideshow.fxml"));
+    			Parent sS = loader.load();
+    			SlideShowController controller = loader.getController();
+    			Scene ssScene = new Scene(sS);
+    			controller.start();
+    			Stage mainStage = (Stage) allPhotosList.getScene().getWindow();
+    			mainStage.setScene(ssScene);
+        	}	
+    	}
+    	catch(Exception e)
+    	{
+    		e.printStackTrace();
+    	}
     }
 }
