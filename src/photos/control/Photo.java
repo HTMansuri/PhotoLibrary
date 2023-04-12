@@ -1,41 +1,58 @@
 package photos.control;
 
 import java.io.Serializable;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 public class Photo implements Serializable
 {
 	private static final long serialVersionUID = 3L;
-	private String photoName;
+	private String caption;
 	private String imagePath;
+	private String lastModDate;
 	
 	public Photo()
 	{
-		photoName = null;
+		caption = null;
 		imagePath = null;
+		setLastModDate(null);
 	}
-	public Photo(String nm, String ip)
+	public Photo(String nm, String ip, String lmd)
 	{
-		photoName = nm;
+		caption = nm;
 		imagePath = ip;
+		setLastModDate(lmd);
 	}
 	
-	public void setPhotoName(String nm)
+	public void setCaption(String nm)
 	{
-		photoName = nm;
+		caption = nm;
+		setLastModDate(LocalDate.now().format(DateTimeFormatter.ofPattern("MM/dd/yyyy")));
 	}
 	
-	public String getPhotoName()
+	public String getCaption()
 	{
-		return photoName;
+		return caption;
 	}
 	
 	public void setImagePath(String ip)
 	{
 		imagePath = ip;
+		setLastModDate(LocalDate.now().format(DateTimeFormatter.ofPattern("MM/dd/yyyy")));
 	}
 	
 	public String getImagePath()
 	{
 		return imagePath;
+	}
+	
+	public String getLastModDate()
+	{
+		return lastModDate;
+	}
+	
+	public void setLastModDate(String lastModDate)
+	{
+		this.lastModDate = lastModDate;
 	}
 }

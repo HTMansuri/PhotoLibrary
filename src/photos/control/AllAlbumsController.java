@@ -1,3 +1,4 @@
+//disappear buttons when no photo in list - optional or add alerts
 package photos.control;
 
 import java.util.ArrayList;
@@ -8,16 +9,20 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.input.MouseButton;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
@@ -55,31 +60,67 @@ public class AllAlbumsController
     	    ListCell<String> cell = new ListCell<>()
     	    {
     	    	protected void updateItem(String item, boolean empty)
-    	    	{
-    	            super.updateItem(item, empty);
-    	            if(empty || item == null)
-    	            {
-    	                setText(null);
-    	            }
-    	            else
-    	            {
-    	                setText(item);
-    	                setGraphic(null);
-    	            }
-    	        }
+                {
+    	    		String path = null;
+                    super.updateItem(item, empty);
+                    if(empty || item == null)
+                    {
+                        setText(null);
+                        setGraphic(null);
+                    }
+                    else
+                    {
+                        User u = UserDataController.getCurrentSessionUser();
+                        ArrayList<Album> a = u.getAlbumList();
+                        for(Album am: a)
+                        {
+                        	if(am.getAlbumName().equals(item))
+                        	{
+                        		ArrayList<Photo> p = am.getPhotoList();
+                        		if(p.size() > 0)
+                        		{
+                        			Photo lastP = p.get(p.size()-1);
+                            		path = lastP.getImagePath();
+                        		}
+                        	}
+                        }
+                        if(path == null)
+                        {
+                        	path = "src/photos/data/tempphoto.png";
+                        }
+                        ImageView imageView = new ImageView();
+                        Image image = new Image("file:" + path);
+                        Label name = new Label(item);
+                        name.setFont(new Font(20));
+                        imageView.setFitWidth(150);
+                        imageView.setFitHeight(120);
+                        imageView.setImage(image);
+                        
+                        HBox hb = new HBox();
+                        VBox vb = new VBox();
+                        vb.getChildren().addAll(name);
+                        vb.setPadding(new Insets(40, 0, 0, 40));
+                        hb.getChildren().addAll(imageView, vb);
+                        setGraphic(hb);
+                    }
+                }
     	    };
-    	    		
+    	    
     	    cell.setOnMouseClicked(event ->
     	    {
     	        if (event.getButton().equals(MouseButton.PRIMARY) && event.getClickCount() == 2)
     	        {
     	            try
     	            {
+    	            	String aNm = allAlbumsList.getSelectionModel().getSelectedItem();
+    	            	User u = UserDataController.getCurrentSessionUser();
+    	            	u.setCurrentSessionAlbum(aNm);
+    	            	
     	                FXMLLoader loader = new FXMLLoader(getClass().getResource("../design/OpenAlbum.fxml"));
     	                Parent openAlbum = loader.load();
     	                OpenAlbumController controller = loader.getController();
     	                Scene allAlbumsScene = new Scene(openAlbum);
-    	                controller.start();
+    	                controller.start(albums);
     	                Stage mainStage = (Stage) allAlbumsList.getScene().getWindow();
     	                mainStage.setScene(allAlbumsScene);
     	            }
@@ -236,7 +277,7 @@ public class AllAlbumsController
 	    		{
 	    			name = a.getAlbumName();
 	    			photosNum = a.PhotosNum(a);
-	    			//
+	    			dateRange = a.dateRange(a);
 	    		}
 	    	}
 	    	

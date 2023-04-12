@@ -4,11 +4,14 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import photos.app.UserDataController;
+
 public class User implements Serializable
 {
 	private static final long serialVersionUID = 2L;
 	private String userName;
 	private ArrayList<Album> album = new ArrayList<>();
+	public static Album currentSessionAlbum;
 	
 	public User()
 	{
@@ -61,5 +64,23 @@ public class User implements Serializable
 	public ArrayList<Album> getAlbumList()
 	{
 		return album;
+	}
+	
+	public void setCurrentSessionAlbum(String albumNm)
+	{
+		User currentUser = UserDataController.getCurrentSessionUser();
+		ArrayList<Album> allAlbum = currentUser.getAlbumList();
+		for(Album a: allAlbum)
+		{
+			if(a.getAlbumName().equals(albumNm))
+			{
+				currentSessionAlbum = a;
+			}
+		}
+	}
+	
+	public static Album getCurrentSessionAlbum()
+	{
+		return currentSessionAlbum;
 	}
 }

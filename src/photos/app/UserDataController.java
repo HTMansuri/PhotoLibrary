@@ -12,6 +12,8 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 import photos.control.Album;
@@ -38,11 +40,11 @@ public class UserDataController implements Serializable
     	Album stockAlbum = new Album("stock");
     	stock.addAlbum(stockAlbum);
     	
-    	Photo p1 = new Photo("stockphoto1", "../data/stockphoto1");
-    	Photo p2 = new Photo("stockphoto2", "../data/stockphoto2");
-    	Photo p3 = new Photo("stockphoto3", "../data/stockphoto3");
-    	Photo p4 = new Photo("stockphoto4", "../data/stockphoto4");
-    	Photo p5 = new Photo("stockphoto5", "../data/stockphoto5");
+    	Photo p1 = new Photo("Temple1", "src/photos/data/stockimage1.jpeg", LocalDate.now().format(DateTimeFormatter.ofPattern("MM/dd/yyyy")));
+    	Photo p2 = new Photo("Temple2", "src/photos/data/stockimage2.jpeg", LocalDate.now().format(DateTimeFormatter.ofPattern("MM/dd/yyyy")));
+    	Photo p3 = new Photo("Temple3", "src/photos/data/stockimage3.jpeg", LocalDate.now().format(DateTimeFormatter.ofPattern("MM/dd/yyyy")));
+    	Photo p4 = new Photo("Temple4", "src/photos/data/stockimage4.jpeg", LocalDate.now().format(DateTimeFormatter.ofPattern("MM/dd/yyyy")));
+    	Photo p5 = new Photo("Temple5", "src/photos/data/stockimage5.jpeg", LocalDate.now().format(DateTimeFormatter.ofPattern("MM/dd/yyyy")));
     	
     	stockAlbum.addPhotos(p1);
     	stockAlbum.addPhotos(p2);
