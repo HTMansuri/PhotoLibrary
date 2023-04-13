@@ -123,7 +123,7 @@ public class OpenAlbumController
                             	if(event.getButton().equals(MouseButton.PRIMARY) && event.getClickCount() == 1)
                             	{
                             		photoDisplay.setImage(image);
-                            		photoDisplay.setPreserveRatio(false);
+                            		photoDisplay.setPreserveRatio(true);
                             		tags.clear();
                             		int selectedIndex = allPhotosList.getSelectionModel().getSelectedIndex();
                             		Photo currPhoto = p.get(selectedIndex);
@@ -152,7 +152,7 @@ public class OpenAlbumController
     		String selectedItem = allPhotosList.getSelectionModel().getSelectedItem();
     		Image i = new Image("file:" + selectedItem);
     		photoDisplay.setImage(i);
-    		photoDisplay.setPreserveRatio(false);
+    		photoDisplay.setPreserveRatio(true);
     		
     		Album a = User.getCurrentSessionAlbum();
     		int selectedIndex = allPhotosList.getSelectionModel().getSelectedIndex();
@@ -320,7 +320,7 @@ public class OpenAlbumController
                 int index = photos.indexOf(imagePath);
                 allPhotosList.getSelectionModel().select(index);
                 photoDisplay.setImage(new Image("file:" + imagePath));
-                photoDisplay.setPreserveRatio(false);
+                photoDisplay.setPreserveRatio(true);
            		managePhotoAP.setVisible(true);
            		slideshowB.setDisable(false);
             }
@@ -463,7 +463,7 @@ public class OpenAlbumController
 	    				allPhotosList.getSelectionModel().clearSelection();
 	    		        allPhotosList.getSelectionModel().select(selectedID);
 	                    photoDisplay.setImage(new Image("file:" + allPhotosList.getSelectionModel().getSelectedItem()));
-	                    photoDisplay.setPreserveRatio(false);
+	                    photoDisplay.setPreserveRatio(true);
 	    			}
 	    			else
 	    			{
@@ -577,7 +577,7 @@ public class OpenAlbumController
 					allPhotosList.getSelectionModel().clearSelection();
 			        allPhotosList.getSelectionModel().select(selectedID);
 	                photoDisplay.setImage(new Image("file:" + allPhotosList.getSelectionModel().getSelectedItem()));
-	                photoDisplay.setPreserveRatio(false);
+	                photoDisplay.setPreserveRatio(true);
 	                
 	                tags.clear();
 	                Album a = User.getCurrentSessionAlbum();

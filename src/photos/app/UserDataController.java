@@ -67,16 +67,15 @@ public class UserDataController implements Serializable
 		users.add(u);
 	}
 	
-	public boolean deleteUser(String username)
+	public void deleteUser(String username)
 	{
 		for(User user : users)
 		{
 			if(user.getUserName().equals(username)) {
 				users.remove(user);
-				return true;
+				break;
 			}
 		}
-		return false;
 	}
 	
 	public ArrayList<String> getUsernames()
