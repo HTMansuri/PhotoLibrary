@@ -18,11 +18,12 @@ public class SlideShowController
     @FXML
     private ImageView imageView;
     
-    private int pointer = 0;
+    private int pointer;
     private ArrayList<Photo> photoList;
 
-    public void start()
+    public void start(int count)
     {
+    	pointer = count;
     	Album a = User.getCurrentSessionAlbum();
     	ArrayList<Photo> photos = a.getPhotoList();
     	photoList = photos;

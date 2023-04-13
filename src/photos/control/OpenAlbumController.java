@@ -2,7 +2,7 @@
 package photos.control;
 
 import java.io.File;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Optional;
@@ -19,6 +19,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
+import javafx.scene.control.TextField;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonType;
@@ -42,8 +43,18 @@ public class OpenAlbumController
     
     @FXML
     private ChoiceBox<String> dropDownMoveCopy;
+    
+    @FXML
+    private ChoiceBox<?> dropDownTagCategory;
+    
+    @FXML
+    private TextField tagCategoryValue;
+    
+    @FXML
+    private ListView<String> tagsList;
 
 	private ObservableList<String> photos;
+	private ObservableList<String> tags;
 	
     public void start()
 	{
@@ -134,6 +145,24 @@ public class OpenAlbumController
    	}
     
     @FXML
+    public void addTag(ActionEvent event)
+    {
+    	
+    }
+
+    @FXML
+    public void addTagCategory(ActionEvent event)
+    {
+    	
+    }
+    
+    @FXML
+    public void removeTag(ActionEvent event)
+    {
+    	
+    }
+    
+    @FXML
     public void addPhoto(ActionEvent event)
     {
     	Album a = User.getCurrentSessionAlbum();
@@ -171,7 +200,7 @@ public class OpenAlbumController
                 }
             	
             	photos.add(imagePath);
-                a.addPhotos(new Photo(captionNm, imagePath, LocalDate.now().format(DateTimeFormatter.ofPattern("MM/dd/yyyy"))));
+                a.addPhotos(new Photo(captionNm, imagePath, LocalDateTime.now().format(DateTimeFormatter.ofPattern("MM/dd/yyyy hh:mm a")), new Tag()));
                 int index = photos.indexOf(imagePath);
                 allPhotosList.getSelectionModel().select(index);
                 photoDisplay.setImage(new Image("file:" + imagePath));
@@ -460,7 +489,8 @@ public class OpenAlbumController
     			Parent sS = loader.load();
     			SlideShowController controller = loader.getController();
     			Scene ssScene = new Scene(sS);
-    			controller.start();
+    			int ssPointer = allPhotosList.getSelectionModel().getSelectedIndex();
+    			controller.start(ssPointer);
     			Stage mainStage = (Stage) allPhotosList.getScene().getWindow();
     			mainStage.setScene(ssScene);
         	}	
