@@ -85,7 +85,7 @@
             <Font size="14.0" />
          </font>
       </Text>
-      <TextField fx:id="tagCategoryValue" layoutX="519.0" layoutY="495.0" prefHeight="26.0" prefWidth="171.0" />
+      <TextField fx:id="tagValue" layoutX="519.0" layoutY="495.0" prefHeight="26.0" prefWidth="171.0" />
       <Button layoutX="616.0" layoutY="528.0" mnemonicParsing="false" onAction="#addTag" prefHeight="24.0" prefWidth="73.0" text="Add Tag">
          <font>
             <Font size="14.0" />

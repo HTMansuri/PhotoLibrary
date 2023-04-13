@@ -50,7 +50,7 @@ public class OpenAlbumController
     private ChoiceBox<String> dropDownTagCategory;
     
     @FXML
-    private TextField tagCategoryValue;
+    private TextField tagValue;
     
     @FXML
     private ListView<String> tagsList;
@@ -61,6 +61,9 @@ public class OpenAlbumController
 	
     public void start()
 	{
+    	tags = FXCollections.observableArrayList();
+    	tagsList.setItems(tags);
+    	
     	allPhotosList.setCellFactory(new Callback<ListView<String>, ListCell<String>>()
     	{
             @Override
@@ -114,6 +117,10 @@ public class OpenAlbumController
                             	{
                             		photoDisplay.setImage(image);
                             		photoDisplay.setPreserveRatio(false);
+                            		tags.clear();
+                            		int selectedIndex = allPhotosList.getSelectionModel().getSelectedIndex();
+                            		Photo currPhoto = p.get(selectedIndex);
+                        	    	tags.addAll(currPhoto.getTags());
                             	}
                             });
                         }
@@ -139,6 +146,13 @@ public class OpenAlbumController
     		Image i = new Image("file:" + selectedItem);
     		photoDisplay.setImage(i);
     		photoDisplay.setPreserveRatio(false);
+    		
+    		Album a = User.getCurrentSessionAlbum();
+    		int selectedIndex = allPhotosList.getSelectionModel().getSelectedIndex();
+    		ArrayList<Photo> p = a.getPhotoList();
+	    	Photo currPhoto = p.get(selectedIndex);
+	    	
+	    	tags.addAll(currPhoto.getTags());
     	}
     	
     	dropDownMoveCopy.getItems().add(0, "Please Select");
@@ -156,11 +170,64 @@ public class OpenAlbumController
     	
     	dropDownTagCategory.getSelectionModel().selectFirst();
     	
+    	
+    	
     	}
     
     @FXML
     public void addTag(ActionEvent event)
     {
+    	if(dropDownTagCategory.getSelectionModel().getSelectedIndex() == 0)
+    	{
+    		Alert confirm = new Alert(Alert.AlertType.ERROR);
+    		confirm.setTitle("ERROR!!!");
+    		confirm.setContentText("No Tag Category selected!!!");
+    		confirm.setHeaderText(null);
+    		confirm.setResizable(false);
+    		confirm.getButtonTypes().setAll(ButtonType.OK);
+    		confirm.showAndWait();
+    	}
+    	else
+    	{
+			
+	    	String selectedCategoryName = dropDownTagCategory.getSelectionModel().getSelectedItem();
+	    	String value = tagValue.getText();
+	    	
+	    	if(!tags.contains(selectedCategoryName+" : "+value)) {
+	    		User currentUser = UserDataController.getCurrentSessionUser();
+            	ArrayList<TagCategory> t = currentUser.getCategories();
+            	TagCategory selectedCategory = null;
+            	
+            	for(TagCategory c : t)
+            	{
+            		if(c.getCategoryName().equals(selectedCategoryName)) {
+            			selectedCategory = c;
+            			break;
+            		}
+            	}
+            	
+            	TagCategory.Tag newTag = selectedCategory.new Tag(value);
+            	
+            	Album a = User.getCurrentSessionAlbum();
+    	    	int selectedID = allPhotosList.getSelectionModel().getSelectedIndex();
+    	    	ArrayList<Photo> p = a.getPhotoList();
+    	    	Photo currPhoto = p.get(selectedID);
+    	    	
+    	    	currPhoto.addTag(newTag);
+                tags.add(selectedCategoryName+" : "+value);
+            	//int index = categories.indexOf(str);
+                //tagsList.getSelectionModel().select(index);
+            	//displayalbum();
+	    	}
+	    	else
+            {
+            	Alert alert = new Alert(AlertType.ERROR);
+                alert.setTitle("Duplicate Tag");
+                alert.setHeaderText(null);
+                alert.setContentText("The Tag \"" + selectedCategoryName+" : "+value + "\" already exists for the selected photo.");
+                alert.showAndWait();
+            }
+    	}
     	
     }
 
@@ -496,9 +563,17 @@ public class OpenAlbumController
 			        allPhotosList.getSelectionModel().select(selectedID);
 	                photoDisplay.setImage(new Image("file:" + allPhotosList.getSelectionModel().getSelectedItem()));
 	                photoDisplay.setPreserveRatio(false);
+	                
+	                tags.clear();
+	                Album a = User.getCurrentSessionAlbum();
+	                ArrayList<Photo> p = a.getPhotoList();
+            		int selectedIndex = allPhotosList.getSelectionModel().getSelectedIndex();
+            		Photo currPhoto = p.get(selectedIndex);
+        	    	tags.addAll(currPhoto.getTags());
 				}
 				else
 				{
+					tags.clear();
 					photoDisplay.setImage(null);
 				}
 			}

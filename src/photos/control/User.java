@@ -112,4 +112,9 @@ public class User implements Serializable
 		}
 		return categoryList;
 	}
+	
+	public ArrayList<TagCategory> getCategories()
+	{
+		return categories;
+	}
 }

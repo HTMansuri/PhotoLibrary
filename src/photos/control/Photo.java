@@ -13,7 +13,7 @@ public class Photo implements Serializable
 	private String caption;
 	private String imagePath;
 	private String lastModDate;
-	private ArrayList<Tag> tags;
+	private ArrayList<Tag> tags = new ArrayList<Tag>();
 	
 	public Photo()
 	{
@@ -28,9 +28,14 @@ public class Photo implements Serializable
 		setLastModDate(lmd);
 	}
 	
-	public ArrayList<Tag> getTags()
+	public ArrayList<String> getTags()
 	{
-		return tags;
+		ArrayList<String> tagValues = new ArrayList<String>();
+		for(Tag t : tags)
+		{
+			tagValues.add(t.toString());
+		}
+		return tagValues;
 	}
 	
 	public void addTag(Tag add)
