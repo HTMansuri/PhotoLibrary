@@ -15,6 +15,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.control.ButtonType;
@@ -38,6 +39,11 @@ public class AllAlbumsController
     @FXML
     private VBox displayAlbumDetails;
     
+    @FXML
+    private Button renameB;
+    @FXML
+    private Button deleteB;
+    
     public void start()
     {
     	albums = FXCollections.observableArrayList();
@@ -55,6 +61,12 @@ public class AllAlbumsController
     		allAlbumsList.getSelectionModel().select(0);
     	}
     	displayalbum();
+    	
+    	if(albums.isEmpty())
+    	{
+    		deleteB.setDisable(true);
+    		renameB.setDisable(true);
+    	}
     	
     	allAlbumsList.setCellFactory(lv ->
     	{
@@ -133,6 +145,8 @@ public class AllAlbumsController
     	    });
     	    return cell;
     	});
+    	
+    	
 	}
 
     @FXML
@@ -153,6 +167,8 @@ public class AllAlbumsController
             	int index = albums.indexOf(str);
                 allAlbumsList.getSelectionModel().select(index);
             	displayalbum();
+        		deleteB.setDisable(false);
+        		renameB.setDisable(false);
             }
             else
             {
@@ -192,6 +208,11 @@ public class AllAlbumsController
 				if(!albums.isEmpty())
 				{
 					allAlbumsList.getSelectionModel().select(selectedID);
+				}
+				else
+				{
+		    		deleteB.setDisable(true);
+		    		renameB.setDisable(true);
 				}
 			}
 			displayalbum();

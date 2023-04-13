@@ -5,7 +5,6 @@ import java.io.File;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 import javafx.collections.FXCollections;
@@ -23,11 +22,13 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
@@ -47,6 +48,9 @@ public class OpenAlbumController
     private ChoiceBox<String> dropDownMoveCopy;
     
     @FXML
+    private AnchorPane managePhotoAP;
+    
+    @FXML
     private ChoiceBox<String> dropDownTagCategory;
     
     @FXML
@@ -58,6 +62,9 @@ public class OpenAlbumController
 	private ObservableList<String> photos;
 	private ObservableList<String> tags;
 	private ObservableList<String> categories;
+	
+	@FXML
+	private Button slideshowB;
 	
     public void start()
 	{
@@ -170,9 +177,12 @@ public class OpenAlbumController
     	
     	dropDownTagCategory.getSelectionModel().selectFirst();
     	
-    	
-    	
+    	if(photos.isEmpty())
+    	{
+    		managePhotoAP.setVisible(false);
+    		slideshowB.setDisable(true);
     	}
+    }
     
     @FXML
     public void addTag(ActionEvent event)
@@ -311,6 +321,8 @@ public class OpenAlbumController
                 allPhotosList.getSelectionModel().select(index);
                 photoDisplay.setImage(new Image("file:" + imagePath));
                 photoDisplay.setPreserveRatio(false);
+           		managePhotoAP.setVisible(true);
+           		slideshowB.setDisable(false);
             }
         }
     }
@@ -455,7 +467,10 @@ public class OpenAlbumController
 	    			}
 	    			else
 	    			{
+	    				tags.clear();
 	    				photoDisplay.setImage(null);
+	    				managePhotoAP.setVisible(false);
+	    				slideshowB.setDisable(true);
 	    			}
 	    		}
 	    	}
@@ -575,6 +590,8 @@ public class OpenAlbumController
 				{
 					tags.clear();
 					photoDisplay.setImage(null);
+					managePhotoAP.setVisible(false);
+					slideshowB.setDisable(true);
 				}
 			}
 		}

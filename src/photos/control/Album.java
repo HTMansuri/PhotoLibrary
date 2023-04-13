@@ -81,7 +81,7 @@ public class Album implements Serializable
 				}
 			}
 		}
-		return minDR + " - " + maxDR;
+		return minDR.substring(0, 10) + " - " + maxDR.substring(0, 10);
 	}
 
 	public Album getAlbum(String selectedItem)
