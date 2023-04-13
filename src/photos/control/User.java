@@ -11,6 +11,7 @@ public class User implements Serializable
 	private static final long serialVersionUID = 2L;
 	private String userName;
 	private ArrayList<Album> album = new ArrayList<>();
+	private ArrayList<TagCategory> categories = new ArrayList<TagCategory>();
 	public static Album currentSessionAlbum;
 	
 	public User()
@@ -82,5 +83,33 @@ public class User implements Serializable
 	public static Album getCurrentSessionAlbum()
 	{
 		return currentSessionAlbum;
+	}
+	
+	public void addTagCategory(TagCategory t)
+	{
+		categories.add(t);
+	}
+	
+	public void removeTagCategory(String selectedCategory) 
+	{
+	    Iterator<TagCategory> iterator = categories.iterator();
+	    while(iterator.hasNext())
+	    {
+	        TagCategory t = iterator.next();
+	        if(t.getCategoryName().equals(selectedCategory))
+	        {
+	            iterator.remove();
+	        }
+	    }
+	}
+	
+	public ArrayList<String> getCategoryList()
+	{
+		ArrayList<String> categoryList = new ArrayList<String>();
+		for(TagCategory c : categories)
+		{
+			categoryList.add(c.getCategoryName());
+		}
+		return categoryList;
 	}
 }

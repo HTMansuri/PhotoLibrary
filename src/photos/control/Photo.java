@@ -5,46 +5,37 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
+import photos.control.TagCategory.Tag;
+
 public class Photo implements Serializable
 {
 	private static final long serialVersionUID = 3L;
 	private String caption;
 	private String imagePath;
 	private String lastModDate;
-	private Tag tag;
-	private ArrayList<String> typeCategory;
+	private ArrayList<Tag> tags;
 	
 	public Photo()
 	{
 		caption = null;
 		imagePath = null;
 		setLastModDate(null);
-		setTag(null);
-		typeCategory = new ArrayList<>();
-		typeCategory.add("person");
-		typeCategory.add("location");
-		typeCategory.add("place");
 	}
-	public Photo(String nm, String ip, String lmd, Tag tag)
+	public Photo(String nm, String ip, String lmd)
 	{
 		caption = nm;
 		imagePath = ip;
 		setLastModDate(lmd);
-		setTag(tag);
-		typeCategory = new ArrayList<>();
-		typeCategory.add("person");
-		typeCategory.add("location");
-		typeCategory.add("place");
 	}
 	
-	public ArrayList<String> getTypeCategories()
+	public ArrayList<Tag> getTags()
 	{
-		return typeCategory;
+		return tags;
 	}
 	
-	public void addTypeCategory(String add)
+	public void addTag(Tag add)
 	{
-		typeCategory.add(add);
+		tags.add(add);
 	}
 	
 	public void setCaption(String nm)
@@ -77,15 +68,5 @@ public class Photo implements Serializable
 	public void setLastModDate(String lastModDate)
 	{
 		this.lastModDate = lastModDate;
-	}
-	
-	public Tag getTag()
-	{
-		return tag;
-	}
-	
-	public void setTag(Tag tag)
-	{
-		this.tag = tag;
 	}
 }

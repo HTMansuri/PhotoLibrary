@@ -5,6 +5,7 @@ import java.io.File;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import javafx.collections.FXCollections;
@@ -32,6 +33,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Callback;
+import photos.app.UserDataController;
 
 public class OpenAlbumController
 {
@@ -45,7 +47,7 @@ public class OpenAlbumController
     private ChoiceBox<String> dropDownMoveCopy;
     
     @FXML
-    private ChoiceBox<?> dropDownTagCategory;
+    private ChoiceBox<String> dropDownTagCategory;
     
     @FXML
     private TextField tagCategoryValue;
@@ -55,6 +57,7 @@ public class OpenAlbumController
 
 	private ObservableList<String> photos;
 	private ObservableList<String> tags;
+	private ObservableList<String> categories;
 	
     public void start()
 	{
@@ -142,7 +145,18 @@ public class OpenAlbumController
     	AllAlbumsController.albums.remove(currentAlbum.getAlbumName());
     	dropDownMoveCopy.getItems().addAll(AllAlbumsController.albums);
     	dropDownMoveCopy.getSelectionModel().selectFirst();
-   	}
+    	
+    	//dropDownTagCategory.getItems().add(0, "--Select--");
+    	
+    	categories = FXCollections.observableArrayList();
+    	dropDownTagCategory.setItems(categories);
+    	categories.add(0, "--Select--");
+    	User currentUser = UserDataController.getCurrentSessionUser();
+    	categories.addAll(currentUser.getCategoryList());
+    	
+    	dropDownTagCategory.getSelectionModel().selectFirst();
+    	
+    	}
     
     @FXML
     public void addTag(ActionEvent event)
@@ -153,7 +167,32 @@ public class OpenAlbumController
     @FXML
     public void addTagCategory(ActionEvent event)
     {
-    	
+    	TextInputDialog dialog = new TextInputDialog();
+        dialog.setTitle("Create New Tag Category");
+        dialog.setHeaderText("Enter the tag category title: ");
+        
+        dialog.showAndWait().ifPresent(str ->
+        {
+            if(!categories.contains(str))
+            {
+            	TagCategory newCategory = new TagCategory(str);
+            	User currentUser = UserDataController.getCurrentSessionUser();
+                currentUser.addTagCategory(newCategory);
+                categories.add(str);
+            	//int index = categories.indexOf(str);
+                //tagsList.getSelectionModel().select(index);
+            	//displayalbum();
+            }
+            else
+            {
+            	Alert alert = new Alert(AlertType.ERROR);
+                alert.setTitle("Duplicate Tag Category");
+                alert.setHeaderText(null);
+                alert.setContentText("A tag category with the name \"" + str + "\" already exists.");
+                alert.showAndWait();
+                addTagCategory(event);
+            }
+        });
     }
     
     @FXML
@@ -200,7 +239,7 @@ public class OpenAlbumController
                 }
             	
             	photos.add(imagePath);
-                a.addPhotos(new Photo(captionNm, imagePath, LocalDateTime.now().format(DateTimeFormatter.ofPattern("MM/dd/yyyy hh:mm a")), new Tag()));
+                a.addPhotos(new Photo(captionNm, imagePath, LocalDateTime.now().format(DateTimeFormatter.ofPattern("MM/dd/yyyy hh:mm a"))));
                 int index = photos.indexOf(imagePath);
                 allPhotosList.getSelectionModel().select(index);
                 photoDisplay.setImage(new Image("file:" + imagePath));
