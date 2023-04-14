@@ -203,7 +203,7 @@ public class SearchPhotosController {
 	    {
 	    	try
 	    	{
-		    	FXMLLoader loader = new FXMLLoader(getClass().getResource("../design/AllAlbums.fxml"));
+		    	FXMLLoader loader = new FXMLLoader(getClass().getResource("../view/AllAlbums.fxml"));
 				Parent allAlbums = loader.load();
 				AllAlbumsController controller = loader.getController();
 				Scene allAlbumsScene = new Scene(allAlbums);
@@ -222,7 +222,7 @@ public class SearchPhotosController {
 	    {
 	    	try
 	    	{
-	    		Parent login = FXMLLoader.load(getClass().getResource("../design/Login.fxml"));
+	    		Parent login = FXMLLoader.load(getClass().getResource("../view/Login.fxml"));
 	            Scene loginScene = new Scene(login);
 	            Stage mainStage = (Stage) searchByDateRange.getScene().getWindow();
 	            mainStage.setScene(loginScene);

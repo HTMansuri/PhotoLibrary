@@ -30,7 +30,7 @@ public class LoginController
     	{
             try
             {
-				Parent admin = FXMLLoader.load(getClass().getResource("../design/admin.fxml"));
+				Parent admin = FXMLLoader.load(getClass().getResource("../view/admin.fxml"));
 		        Scene adminScene = new Scene(admin);
 		        Stage mainStage = (Stage) userName.getScene().getWindow();
 		        mainStage.setScene(adminScene);
@@ -47,11 +47,11 @@ public class LoginController
     		{
     			try
                 {
-//    				Parent allAlbums = FXMLLoader.load(getClass().getResource("../design/AllAlbums.fxml"));
+//    				Parent allAlbums = FXMLLoader.load(getClass().getResource("../view/AllAlbums.fxml"));
 //    		        Scene allAlbumsScene = new Scene(allAlbums);
 //    		        Stage mainStage = (Stage) userName.getScene().getWindow();
 //    		        mainStage.setScene(allAlbumsScene);
-    				FXMLLoader loader = new FXMLLoader(getClass().getResource("../design/AllAlbums.fxml"));
+    				FXMLLoader loader = new FXMLLoader(getClass().getResource("../view/AllAlbums.fxml"));
     				Parent allAlbums = loader.load();
     				AllAlbumsController controller = loader.getController();
     				Scene allAlbumsScene = new Scene(allAlbums);

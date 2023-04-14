@@ -36,11 +36,11 @@ public class UserDataController implements Serializable
     	Album stockAlbum = new Album("stock");
     	stock.addAlbum(stockAlbum);
     	
-    	Photo p1 = new Photo("Temple1", "src/photos/data/stockimage1.jpeg", LocalDateTime.now().format(DateTimeFormatter.ofPattern("MM/dd/yyyy hh:mm a")));
-    	Photo p2 = new Photo("Temple2", "src/photos/data/stockimage2.jpeg", LocalDateTime.now().format(DateTimeFormatter.ofPattern("MM/dd/yyyy hh:mm a")));
-    	Photo p3 = new Photo("Temple3", "src/photos/data/stockimage3.jpeg", LocalDateTime.now().format(DateTimeFormatter.ofPattern("MM/dd/yyyy hh:mm a")));
-    	Photo p4 = new Photo("Temple4", "src/photos/data/stockimage4.jpeg", LocalDateTime.now().format(DateTimeFormatter.ofPattern("MM/dd/yyyy hh:mm a")));
-    	Photo p5 = new Photo("Temple5", "src/photos/data/stockimage5.jpeg", LocalDateTime.now().format(DateTimeFormatter.ofPattern("MM/dd/yyyy hh:mm a")));
+    	Photo p1 = new Photo("Temple1", "data/stockimage1.jpeg", LocalDateTime.now().format(DateTimeFormatter.ofPattern("MM/dd/yyyy hh:mm a")));
+    	Photo p2 = new Photo("Temple2", "data/stockimage2.jpeg", LocalDateTime.now().format(DateTimeFormatter.ofPattern("MM/dd/yyyy hh:mm a")));
+    	Photo p3 = new Photo("Temple3", "data/stockimage3.jpeg", LocalDateTime.now().format(DateTimeFormatter.ofPattern("MM/dd/yyyy hh:mm a")));
+    	Photo p4 = new Photo("Temple4", "data/stockimage4.jpeg", LocalDateTime.now().format(DateTimeFormatter.ofPattern("MM/dd/yyyy hh:mm a")));
+    	Photo p5 = new Photo("Temple5", "data/stockimage5.jpeg", LocalDateTime.now().format(DateTimeFormatter.ofPattern("MM/dd/yyyy hh:mm a")));
     	
     	stockAlbum.addPhotos(p1);
     	stockAlbum.addPhotos(p2);
@@ -98,7 +98,7 @@ public class UserDataController implements Serializable
 	public static UserDataController readFromAFile()
 	{
 		UserDataController loadUsers = UserDataController.getInstance();
-		File file = new File("src/photos/data/users.ser");
+		File file = new File("data/users.ser");
 		try
 		{
 			if(file.length() == 0)
@@ -129,7 +129,7 @@ public class UserDataController implements Serializable
 	
 	public void writeToAFile()
 	{
-		try(ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("src/photos/data/users.ser")))
+		try(ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("data/users.ser")))
 		{
             oos.writeObject(users);
         }

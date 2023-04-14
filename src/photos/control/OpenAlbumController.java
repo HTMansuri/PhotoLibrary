@@ -732,7 +732,7 @@ public class OpenAlbumController
     {
     	try
     	{
-	    	FXMLLoader loader = new FXMLLoader(getClass().getResource("../design/AllAlbums.fxml"));
+	    	FXMLLoader loader = new FXMLLoader(getClass().getResource("../view/AllAlbums.fxml"));
 			Parent allAlbums = loader.load();
 			AllAlbumsController controller = loader.getController();
 			Scene allAlbumsScene = new Scene(allAlbums);
@@ -751,7 +751,7 @@ public class OpenAlbumController
     {
     	try
     	{
-    		Parent login = FXMLLoader.load(getClass().getResource("../design/Login.fxml"));
+    		Parent login = FXMLLoader.load(getClass().getResource("../view/Login.fxml"));
             Scene loginScene = new Scene(login);
             Stage mainStage = (Stage) allPhotosList.getScene().getWindow();
             mainStage.setScene(loginScene);
@@ -833,7 +833,7 @@ public class OpenAlbumController
         	}
         	else
         	{
-        		FXMLLoader loader = new FXMLLoader(getClass().getResource("../design/Slideshow.fxml"));
+        		FXMLLoader loader = new FXMLLoader(getClass().getResource("../view/Slideshow.fxml"));
     			Parent sS = loader.load();
     			SlideShowController controller = loader.getController();
     			Scene ssScene = new Scene(sS);

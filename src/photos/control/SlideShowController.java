@@ -87,7 +87,7 @@ public class SlideShowController
     {
     	try
     	{
-	    	FXMLLoader loader = new FXMLLoader(getClass().getResource("../design/OpenAlbum.fxml"));
+	    	FXMLLoader loader = new FXMLLoader(getClass().getResource("../view/OpenAlbum.fxml"));
 			Parent openAlbum = loader.load();
 			OpenAlbumController controller = loader.getController();
 			Scene openAlbumScene = new Scene(openAlbum);
@@ -106,7 +106,7 @@ public class SlideShowController
     {
     	try
     	{
-    		Parent login = FXMLLoader.load(getClass().getResource("../design/Login.fxml"));
+    		Parent login = FXMLLoader.load(getClass().getResource("../view/Login.fxml"));
             Scene loginScene = new Scene(login);
             Stage mainStage = (Stage) imageView.getScene().getWindow();
             mainStage.setScene(loginScene);

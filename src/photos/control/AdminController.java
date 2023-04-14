@@ -101,7 +101,7 @@ public class AdminController
     {
     	try
     	{
-    		Parent login = FXMLLoader.load(getClass().getResource("../design/Login.fxml"));
+    		Parent login = FXMLLoader.load(getClass().getResource("../view/Login.fxml"));
             Scene loginScene = new Scene(login);
             Stage mainStage = (Stage) adminList.getScene().getWindow();
             mainStage.setScene(loginScene);

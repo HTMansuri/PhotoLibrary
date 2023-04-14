@@ -117,7 +117,7 @@ public class AllAlbumsController
                         }
                         if(path == null)
                         {
-                        	path = "src/photos/data/tempphoto.png";
+                        	path = "data/tempphoto.png";
                         }
                         ImageView imageView = new ImageView();
                         Image image = new Image("file:" + path);
@@ -147,7 +147,7 @@ public class AllAlbumsController
     	            	User u = UserDataController.getCurrentSessionUser();
     	            	u.setCurrentSessionAlbum(aNm);
     	            	
-    	                FXMLLoader loader = new FXMLLoader(getClass().getResource("../design/OpenAlbum.fxml"));
+    	                FXMLLoader loader = new FXMLLoader(getClass().getResource("../view/OpenAlbum.fxml"));
     	                Parent openAlbum = loader.load();
     	                OpenAlbumController controller = loader.getController();
     	                Scene allAlbumsScene = new Scene(openAlbum);
@@ -244,7 +244,7 @@ public class AllAlbumsController
     {
     	try
     	{
-    		Parent login = FXMLLoader.load(getClass().getResource("../design/Login.fxml"));
+    		Parent login = FXMLLoader.load(getClass().getResource("../view/Login.fxml"));
             Scene loginScene = new Scene(login);
             Stage mainStage = (Stage) allAlbumsList.getScene().getWindow();
             mainStage.setScene(loginScene);
@@ -406,7 +406,7 @@ public class AllAlbumsController
         	}
             else 
             {
-	            FXMLLoader loader = new FXMLLoader(getClass().getResource("../design/searchPhotos.fxml"));
+	            FXMLLoader loader = new FXMLLoader(getClass().getResource("../view/searchPhotos.fxml"));
 	            try {
 	                Parent searchPhotos = loader.load();
 	                SearchPhotosController controller = loader.getController();
@@ -469,7 +469,7 @@ public class AllAlbumsController
                     alert.showAndWait();
                 } else {
                     // Load the searchPhotos.fxml file and pass the dates to the controller
-                    FXMLLoader loader = new FXMLLoader(getClass().getResource("../design/searchPhotos.fxml"));
+                    FXMLLoader loader = new FXMLLoader(getClass().getResource("../view/searchPhotos.fxml"));
                     try {
                         Parent searchPhotos = loader.load();
                         SearchPhotosController controller = loader.getController();

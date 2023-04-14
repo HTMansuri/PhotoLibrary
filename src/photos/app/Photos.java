@@ -27,7 +27,7 @@ public class Photos extends Application
 		{
 			UserDataController.readFromAFile();
 			FXMLLoader loader = new FXMLLoader();
-			loader.setLocation(getClass().getResource("../design/Login.fxml"));
+			loader.setLocation(getClass().getResource("../view/Login.fxml"));
 			AnchorPane root = loader.load();
 			Scene scene = new Scene(root);
 			
