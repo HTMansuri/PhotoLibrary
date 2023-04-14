@@ -35,9 +35,9 @@ public class Album implements Serializable
 		photos.add(p);
 	}
 	
-	public int PhotosNum(Album a)
+	public int PhotosNum()
 	{
-		return a.getPhotoList().size();
+		return this.getPhotoList().size();
 	}
 	
 	public ArrayList<Photo> getPhotoList()
@@ -45,11 +45,11 @@ public class Album implements Serializable
 		return photos;
 	}
 	
-	public String dateRange(Album a)
+	public String dateRange()
 	{
 		String minDR = "99/99/9999";
 		String maxDR = "00/00/0000";
-		ArrayList<Photo> p = a.getPhotoList();
+		ArrayList<Photo> p = this.getPhotoList();
 		if(p.size() == 0)
 		{
 			return "N/A";

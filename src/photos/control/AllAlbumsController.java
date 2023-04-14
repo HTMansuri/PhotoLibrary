@@ -2,6 +2,11 @@
 //error handling left for rename and delete if no albums
 package photos.control;
 
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Optional;
 
@@ -11,6 +16,8 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -19,15 +26,20 @@ import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
+import javafx.scene.control.TextField;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.util.converter.LocalDateStringConverter;
 import photos.app.UserDataController;
 
 public class AllAlbumsController
@@ -43,6 +55,15 @@ public class AllAlbumsController
     private Button renameB;
     @FXML
     private Button deleteB;
+    
+    @FXML
+    private Button searchByDateRange;
+
+    @FXML
+    private Button searchByTags;
+    
+    private ObservableList<String> categories;
+	
     
     public void start()
     {
@@ -146,7 +167,9 @@ public class AllAlbumsController
     	    return cell;
     	});
     	
-    	
+    	categories = FXCollections.observableArrayList();
+    	categories.add(0, "--Select--");
+    	categories.addAll(currentUser.getCategoryList());	
 	}
 
     @FXML
@@ -298,8 +321,8 @@ public class AllAlbumsController
 	    		if(a.getAlbumName().equals(allAlbumsList.getSelectionModel().getSelectedItem()))
 	    		{
 	    			name = a.getAlbumName();
-	    			photosNum = a.PhotosNum(a);
-	    			dateRange = a.dateRange(a);
+	    			photosNum = a.PhotosNum();
+	    			dateRange = a.dateRange();
 	    		}
 	    	}
 	    	
@@ -322,12 +345,121 @@ public class AllAlbumsController
     @FXML
     public void tagPairsSearch(ActionEvent event)
     {
-    	
+    	Stage popup = new Stage();
+        popup.initModality(Modality.APPLICATION_MODAL);
+        popup.setTitle("Tag Pair Search");
+        popup.setResizable(false);
+        // Create the UI elements for the popup
+        Label categoryLabel = new Label("Select Tag Category:");
+        ChoiceBox<String> categoryChoiceBox = new ChoiceBox<>(categories);
+        categoryChoiceBox.getSelectionModel().selectFirst();
+        Label tagLabel = new Label("Tag Value:");
+        TextField tagTextField = new TextField();
+        Button searchButton = new Button("Search");
+        searchButton.setOnAction(e -> {
+            String category = categoryChoiceBox.getValue();
+            String tagValue = tagTextField.getText();
+            String tagStr = category + " : " + tagValue;
+            // Load the searchPhotos.fxml file and pass the tag pair to the controller
+            if(categoryChoiceBox.getSelectionModel().getSelectedIndex() == 0)
+        	{
+            	Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Invalid Tag Pair!!!");
+                alert.setHeaderText("No Tag Category Selected!!!");
+                alert.showAndWait();
+        	}
+            else if(tagValue.isBlank())
+        	{
+            	Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Invalid Tag Pair!!!");
+                alert.setHeaderText("Please Enter a Valid Tag Value!");
+                alert.showAndWait();
+        	}
+            else 
+            {
+	            FXMLLoader loader = new FXMLLoader(getClass().getResource("../design/searchPhotos.fxml"));
+	            try {
+	                Parent searchPhotos = loader.load();
+	                SearchPhotosController controller = loader.getController();
+	                Scene searchPhotosScene = new Scene(searchPhotos);
+	                controller.search(null, null, tagStr);
+	                Stage mainStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+	                mainStage.setScene(searchPhotosScene);
+	            } catch (IOException ex) {
+	                ex.printStackTrace();
+	            }
+	            popup.close();
+            }
+        });
+        
+        // Add UI elements to the popup window
+        VBox vbox = new VBox(categoryLabel, categoryChoiceBox, tagLabel, tagTextField, searchButton);
+        vbox.setAlignment(Pos.CENTER);
+        vbox.setSpacing(10);
+        vbox.setPadding(new Insets(10));
+        popup.setScene(new Scene(vbox));
+        popup.showAndWait();
     }
     
     @FXML
-    public void dateRangeSearch(ActionEvent event)
-    {
-    	
+    public void dateRangeSearch(ActionEvent event) {
+        // Create a new popup window
+        Stage popup = new Stage();
+        popup.initModality(Modality.APPLICATION_MODAL);
+        popup.setTitle("Date Range Search");
+        popup.setResizable(false);
+        // Create the UI elements for the popup
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
+        Label fromDateLabel = new Label("From Date:");
+        DatePicker fromDateField = new DatePicker();
+        fromDateField.setEditable(false);
+        fromDateField.getEditor().setOnMouseClicked(e -> fromDateField.show());
+        fromDateField.setConverter(new LocalDateStringConverter(dateFormatter, null));
+        Label toDateLabel = new Label("To Date:");
+        DatePicker toDateField = new DatePicker();
+        toDateField.setEditable(false);
+        toDateField.getEditor().setOnMouseClicked(e -> toDateField.show());
+        toDateField.setConverter(new LocalDateStringConverter(dateFormatter, null));
+        Button searchButton = new Button("Search");
+        searchButton.setOnAction(e -> {
+            LocalDate fromDate = fromDateField.getValue();
+            LocalDate toDate = toDateField.getValue();
+                if (fromDate == null || toDate == null) {
+                    // Alert the user if no date is provided
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Invalid Date Range!!!");
+                    alert.setHeaderText("Please select a valid Date-Range");
+                    alert.showAndWait();
+                } else if (fromDate.isAfter(toDate)) {
+                    // Alert the user if fromDate is after toDate
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Invalid Date Range!!!");
+                    alert.setHeaderText("From Date cannot be after To Date");
+                    alert.showAndWait();
+                } else {
+                    // Load the searchPhotos.fxml file and pass the dates to the controller
+                    FXMLLoader loader = new FXMLLoader(getClass().getResource("../design/searchPhotos.fxml"));
+                    try {
+                        Parent searchPhotos = loader.load();
+                        SearchPhotosController controller = loader.getController();
+                        Scene searchPhotosScene = new Scene(searchPhotos);
+                        controller.search(fromDate, toDate, null);
+                        Stage mainStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                        mainStage.setScene(searchPhotosScene);
+                    } catch (IOException ex) {
+                        ex.printStackTrace();
+                    }
+                    popup.close();
+                }
+        });
+
+        // Add the UI elements to the popup window
+        VBox vbox = new VBox(fromDateLabel, fromDateField, toDateLabel, toDateField, searchButton);
+        vbox.setAlignment(Pos.CENTER);
+        vbox.setSpacing(10);
+        vbox.setPadding(new Insets(10));
+        popup.setScene(new Scene(vbox));
+        popup.showAndWait();
     }
+
 }

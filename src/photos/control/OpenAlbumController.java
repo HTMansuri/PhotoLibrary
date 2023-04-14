@@ -128,6 +128,7 @@ public class OpenAlbumController
                             imageView.setFitWidth(150);
                             imageView.setFitHeight(120);
                             imageView.setImage(image);
+  
                             
                             // Set the image and text in the cell
                             // setText(item);

@@ -35,12 +35,12 @@
             <Font size="18.0" />
          </font>
       </Button>
-      <Button layoutX="451.0" layoutY="66.0" mnemonicParsing="false" onAction="#tagPairsSearch" prefHeight="40.0" prefWidth="237.0" text="Search Photos By Tag Pairs">
+      <Button fx:id="searchByTags" layoutX="451.0" layoutY="66.0" mnemonicParsing="false" onAction="#tagPairsSearch" prefHeight="40.0" prefWidth="240.0" text="Search Photos By Tag Pairs">
          <font>
             <Font size="18.0" />
          </font>
       </Button>
-      <Button layoutX="170.0" layoutY="66.0" mnemonicParsing="false" onAction="#dateRangeSearch" prefHeight="40.0" prefWidth="263.0" text="Search Photos By Date Range">
+      <Button fx:id="searchByDateRange" layoutX="170.0" layoutY="66.0" mnemonicParsing="false" onAction="#dateRangeSearch" prefHeight="40.0" prefWidth="263.0" text="Search Photos By Date Range">
          <font>
             <Font size="18.0" />
          </font>

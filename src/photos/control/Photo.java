@@ -39,6 +39,16 @@ public class Photo implements Serializable
 		return tagValues;
 	}
 	
+	public boolean containsTag(String tagString)
+	{
+		for(Tag t : tags)
+		{
+			if(t.toString().equals(tagString))
+				return true;
+		}
+		return false;
+	}
+	
 	public void addTag(Tag add)
 	{
 		tags.add(add);
