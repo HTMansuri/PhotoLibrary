@@ -5,6 +5,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Predicate;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -97,7 +98,8 @@ public class SearchPhotosController {
     }
 
     @FXML
-    void tagPairsSearch(ActionEvent event) {
+    void tagPairsSearch(ActionEvent event) 
+    {
     	Stage popup = new Stage();
         popup.initModality(Modality.APPLICATION_MODAL);
         popup.setTitle("Tag Pair Search");
@@ -132,7 +134,7 @@ public class SearchPhotosController {
             {
 	            popup.close();
 	            photos.clear();
-	            search(null, null, tagStr);
+	            search(null, null, tagStr, null, null);
 	        }
         });
         
@@ -185,7 +187,7 @@ public class SearchPhotosController {
                     // Load the searchPhotos.fxml file and pass the dates to the controller
                 	popup.close();
                 	photos.clear();
-                	search(fromDate, toDate, null);
+                	search(fromDate, toDate, null, null, null);
                 }
         });
 
@@ -233,37 +235,50 @@ public class SearchPhotosController {
 	    	}
 	    }
 
-	public void search(LocalDate fromDate, LocalDate toDate, String tagStr) {
+	public void search(LocalDate fromDate, LocalDate toDate, String tagStr,  String operator, String tagStr2) {
 		//start();
     	
 		DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
 		User currentUser = UserDataController.getCurrentSessionUser();
 		ArrayList<Album> currAlbums = currentUser.getAlbumList();
-		for(Album album : currAlbums)
-		{
-			String albumDateRange = album.dateRange();
-			LocalDate albumFromDate = LocalDate.parse(albumDateRange.substring(0, albumDateRange.indexOf("-")).trim(), dateFormatter);
-			LocalDate albumToDate = LocalDate.parse(albumDateRange.substring(albumDateRange.indexOf("-")+1).trim(), dateFormatter);
-			if((fromDate==null && toDate == null) || ((albumFromDate.isAfter(fromDate) || albumFromDate.isEqual(fromDate)) && (albumToDate.isBefore(toDate) || albumToDate.isEqual(toDate))))
-			{
-				ArrayList<Photo> albumPhotos = album.getPhotoList();
-				for(Photo photo : albumPhotos)
-				{
-					LocalDate photoLastModDate = LocalDate.parse(photo.getLastModDate().substring(0,10), dateFormatter);
-					if((fromDate == null && toDate == null) || ((photoLastModDate.isAfter(fromDate) || photoLastModDate.isEqual(fromDate)) && (photoLastModDate.isBefore(toDate) || photoLastModDate.isEqual(toDate))))
-					{
-						if(tagStr==null || photo.containsTag(tagStr))
-						{
-							//if(!photos.contains(photo.getImagePath()))
-							photos.add(photo.getImagePath());
-							
-						}
-					}
-				}
-			}		
-		}
-		displayPhotos();
 		
+		Predicate<Photo> searchPredicate;
+	    if(operator != null && tagStr2 != null) {
+	        if(operator.equalsIgnoreCase("AND")) {
+	            searchPredicate = photo -> photo.containsTag(tagStr) && photo.containsTag(tagStr2);
+	        } else if(operator.equalsIgnoreCase("OR")) {
+	            searchPredicate = photo -> photo.containsTag(tagStr) || photo.containsTag(tagStr2);
+	        } else {
+	            searchPredicate = photo -> photo.containsTag(tagStr);
+	        }
+	    } else {
+	        searchPredicate = photo -> photo.containsTag(tagStr);
+	    }
+	    
+	    for(Album album : currAlbums)
+	    {
+	        String albumDateRange = album.dateRange();
+	        LocalDate albumFromDate = LocalDate.parse(albumDateRange.substring(0, albumDateRange.indexOf("-")).trim(), dateFormatter);
+	        LocalDate albumToDate = LocalDate.parse(albumDateRange.substring(albumDateRange.indexOf("-")+1).trim(), dateFormatter);
+	        if((fromDate==null && toDate == null) || ((albumFromDate.isAfter(fromDate) || albumFromDate.isEqual(fromDate)) && (albumToDate.isBefore(toDate) || albumToDate.isEqual(toDate))))
+	        {
+	            ArrayList<Photo> albumPhotos = album.getPhotoList();
+	            for(Photo photo : albumPhotos)
+	            {
+	                LocalDate photoLastModDate = LocalDate.parse(photo.getLastModDate().substring(0,10), dateFormatter);
+	                if((fromDate == null && toDate == null) || ((photoLastModDate.isAfter(fromDate) || photoLastModDate.isEqual(fromDate)) && (photoLastModDate.isBefore(toDate) || photoLastModDate.isEqual(toDate))))
+	                {
+	                    if((fromDate != null && toDate != null) || searchPredicate.test(photo))
+	                    {
+	                        if(!photos.contains(photo.getImagePath()))
+	                        	photos.add(photo.getImagePath());
+	                        
+	                    }
+	                }
+	            }
+	        }       
+	    }
+	    displayPhotos();
 	}
 	
 	// Call this method to display the photos in the searchPhotosList ListView

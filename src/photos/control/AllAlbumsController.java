@@ -373,7 +373,7 @@ public class AllAlbumsController
         VBox v2 = new VBox();
         Label categoryLabel2 = new Label("Select Tag Category 1:");
         ChoiceBox<String> categoryChoiceBox2 = new ChoiceBox<>(categories);
-        categoryChoiceBox.getSelectionModel().selectFirst();
+        categoryChoiceBox2.getSelectionModel().selectFirst();
         Label tagLabel2 = new Label("Tag Value:");
         TextField tagTextField2 = new TextField();
         v2.getChildren().addAll(categoryLabel2, categoryChoiceBox2, tagLabel2, tagTextField2);
@@ -389,6 +389,10 @@ public class AllAlbumsController
             String category = categoryChoiceBox.getValue();
             String tagValue = tagTextField.getText();
             String tagStr = category + " : " + tagValue;
+            String category2 = categoryChoiceBox2.getValue();
+            String tagValue2 = tagTextField2.getText();
+            String tagStr2 = category2 + " : " + tagValue2;
+            String operator = cbs.getValue();
             // Load the searchPhotos.fxml file and pass the tag pair to the controller
             if(categoryChoiceBox.getSelectionModel().getSelectedIndex() == 0)
         	{
@@ -404,6 +408,27 @@ public class AllAlbumsController
                 alert.setHeaderText("Please Enter a Valid Tag Value!");
                 alert.showAndWait();
         	}
+            else if(categoryChoiceBox2.getSelectionModel().getSelectedIndex() != 0 && tagValue2.isBlank())
+            {
+            	Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Invalid Tag Pair!!!");
+                alert.setHeaderText("Please Enter a Valid Tag Value!");
+                alert.showAndWait();
+            }
+            else if(cbs.getSelectionModel().getSelectedIndex()==0 && categoryChoiceBox2.getSelectionModel().getSelectedIndex() != 0 && !tagValue2.isBlank())
+            {
+            	Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Invalid Tag Pair!!!");
+                alert.setHeaderText("Please Enter a Valid Tag Value!");
+                alert.showAndWait();
+            }
+            else if(categoryChoiceBox2.getSelectionModel().getSelectedIndex() == 0 && !tagValue2.isBlank())
+            {
+            	Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Invalid Tag Pair!!!");
+                alert.setHeaderText("Please Enter a Valid Tag Value!");
+                alert.showAndWait();
+            }
             else 
             {
 	            FXMLLoader loader = new FXMLLoader(getClass().getResource("../view/searchPhotos.fxml"));
@@ -411,7 +436,15 @@ public class AllAlbumsController
 	                Parent searchPhotos = loader.load();
 	                SearchPhotosController controller = loader.getController();
 	                Scene searchPhotosScene = new Scene(searchPhotos);
-	                controller.search(null, null, tagStr);
+	                if(categoryChoiceBox2.getSelectionModel().getSelectedIndex() == 0) {
+	                	tagStr2 = null;
+	                	operator = null;
+	                }
+
+	                System.out.println(operator);
+
+	                System.out.println(tagStr2);
+	                controller.search(null, null, tagStr, operator, tagStr2);
 	                Stage mainStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
 	                mainStage.setScene(searchPhotosScene);
 	            } catch (IOException ex) {
@@ -474,7 +507,7 @@ public class AllAlbumsController
                         Parent searchPhotos = loader.load();
                         SearchPhotosController controller = loader.getController();
                         Scene searchPhotosScene = new Scene(searchPhotos);
-                        controller.search(fromDate, toDate, null);
+                        controller.search(fromDate, toDate, null, null, null);
                         Stage mainStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
                         mainStage.setScene(searchPhotosScene);
                     } catch (IOException ex) {
