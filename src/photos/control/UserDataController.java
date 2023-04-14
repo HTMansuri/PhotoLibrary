@@ -3,7 +3,7 @@
 // implements Singelton design pattern
 // all classes to serialize implements Serializable
 
-package photos.app;
+package photos.control;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -15,10 +15,6 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-
-import photos.control.Album;
-import photos.control.Photo;
-import photos.control.User;
 
 public class UserDataController implements Serializable
 {

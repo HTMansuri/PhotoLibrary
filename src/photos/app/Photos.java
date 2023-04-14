@@ -13,6 +13,7 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import photos.control.LoginController;
+import photos.control.UserDataController;
 
 public class Photos extends Application 
 {

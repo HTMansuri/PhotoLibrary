@@ -2,8 +2,6 @@ package photos.control;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-import photos.app.UserDataController;
-
 public class Album implements Serializable
 {
 	private static final long serialVersionUID = 4L;

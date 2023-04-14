@@ -38,7 +38,6 @@ import javafx.scene.text.Font;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.converter.LocalDateStringConverter;
-import photos.app.UserDataController;
 
 public class AllAlbumsController
 {
@@ -493,5 +492,4 @@ public class AllAlbumsController
         popup.setScene(new Scene(vbox));
         popup.showAndWait();
     }
-
 }

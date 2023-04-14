@@ -4,8 +4,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import photos.app.UserDataController;
-
 public class User implements Serializable
 {
 	private static final long serialVersionUID = 2L;
