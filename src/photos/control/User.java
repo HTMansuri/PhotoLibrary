@@ -19,14 +19,12 @@ public class User implements Serializable
 		userName = null;
 		categories.add(new TagCategory("Location", true));
 		categories.add(new TagCategory("Person"));
-		categories.add(new TagCategory("ThinkIT"));
 	}
 	public User(String nm)
 	{
 		userName = nm;
 		categories.add(new TagCategory("Location", true));
 		categories.add(new TagCategory("Person"));
-		categories.add(new TagCategory("ThinkIT"));
 	}
 	
 	public void setUserName(String nm)

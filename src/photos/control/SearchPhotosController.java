@@ -1,22 +1,18 @@
 package photos.control;
 
-import java.io.IOException;
-import java.net.URL;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.ResourceBundle;
+import java.util.Optional;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -27,21 +23,16 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TextInputDialog;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseButton;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.util.Callback;
 import javafx.util.converter.LocalDateStringConverter;
 import photos.app.UserDataController;
-import photos.control.TagCategory.Tag;
-
-
 
 public class SearchPhotosController {
 
@@ -65,8 +56,45 @@ public class SearchPhotosController {
 
 
     @FXML
-    void createAlbum(ActionEvent event) {
-
+    void createAlbum(ActionEvent event)
+    {
+    	if(photos.isEmpty())
+    	{
+    		Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("No Search Results!!!");
+            alert.setHeaderText("No search results to create an album!!!");
+            alert.showAndWait();
+    	}
+    	else
+    	{
+    		ArrayList<Photo> tempP = new ArrayList<>();
+    		User currUser = UserDataController.getCurrentSessionUser();
+    		ArrayList<Album> userAlbums = currUser.getAlbumList();
+    		for(Album a: userAlbums)
+    		{
+    			ArrayList<Photo> userPhotos = a.getPhotoList();
+    			for(Photo p: userPhotos)
+    			{
+    				if(photos.contains(p.getImagePath()))
+    				{
+    					tempP.add(p);
+    				}
+    			}
+    		}
+    		TextInputDialog dialog = new TextInputDialog();
+    	    dialog.setTitle("Album Name: ");
+    	    dialog.setHeaderText("Enter a album name that best matches these search results: ");
+    	    Optional<String> result = dialog.showAndWait();
+    	    if(result.isPresent())
+    	    {
+    	    	String nm = result.get();
+    	    	userAlbums.add(new Album(nm, tempP));
+    	    	Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("New Album!!!");
+                alert.setHeaderText(nm + " album created successfully!!!");
+                alert.showAndWait();
+    	    }
+    	}
     }
 
     @FXML
@@ -210,7 +238,7 @@ public class SearchPhotosController {
 		//start();
     	
 		DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
-		User currentUser = UserDataController.getInstance().getCurrentSessionUser();
+		User currentUser = UserDataController.getCurrentSessionUser();
 		ArrayList<Album> currAlbums = currentUser.getAlbumList();
 		for(Album album : currAlbums)
 		{

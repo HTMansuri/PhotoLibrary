@@ -20,6 +20,12 @@ public class Album implements Serializable
 		albumName = nm;
 	}
 	
+	public Album(String nm, ArrayList<Photo> p)
+	{
+		albumName = nm;
+		photos = p;
+	}
+	
 	public void setAlbumName(String nm)
 	{
 		albumName = nm;

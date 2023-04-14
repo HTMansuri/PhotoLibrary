@@ -34,6 +34,8 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Callback;
@@ -72,14 +74,22 @@ public class OpenAlbumController
 	@FXML
 	private Button removeTagB;
 	
+	@FXML
+    private Text capT;
+
+    @FXML
+    private Text dateTimeT;
+	
     public void start()
 	{
     	tags = FXCollections.observableArrayList();
     	tagsList.setItems(tags);
     	
     	tagsList.getSelectionModel().selectedItemProperty().addListener(
-    	        (observable, oldValue, newValue) -> {
-    	            if (newValue != null) {
+    	        (observable, oldValue, newValue) -> 
+    	        {
+    	            if (newValue != null) 
+    	            {
     	                String selectedString = newValue.toString();
     	                String categoryName = selectedString.substring(0, selectedString.indexOf(":")).trim();
     	                String tagValueStr = selectedString.substring(selectedString.indexOf(":")+1).trim();
@@ -139,7 +149,10 @@ public class OpenAlbumController
                             	if(item.equals(po.getImagePath()))
                             	{
                             		caption.setText(po.getCaption());
-                            		date.setText("" + po.getLastModDate());
+                            		caption.setFont(new Font(20));
+                            		//date.setText("" + po.getLastModDate());
+                            		capT.setText("Caption: " + po.getCaption());
+                            		dateTimeT.setText("Date/Time: " + po.getLastModDate());
                             	}
                             }
                             HBox hb = new HBox();
@@ -151,8 +164,18 @@ public class OpenAlbumController
                             
                             this.setOnMouseClicked(event ->
                             {
+                            	//display cap & d/t
                             	if(event.getButton().equals(MouseButton.PRIMARY) && event.getClickCount() == 1)
                             	{
+                                    for(Photo po: p)
+                                    {
+                                    	if(item.equals(po.getImagePath()))
+                                    	{
+                                    		capT.setText("Caption: " + po.getCaption());
+                                    		dateTimeT.setText("Date/Time: " + po.getLastModDate());
+                                    	}
+                                    }
+                            		
                             		photoDisplay.setImage(image);
                             		photoDisplay.setPreserveRatio(true);
                             		tags.clear();
@@ -170,6 +193,7 @@ public class OpenAlbumController
 
                     	    		tagValue.clear();
                     	    		dropDownTagCategory.getSelectionModel().select(0);
+                    	    		
                         	    	tagsList.getSelectionModel().selectedItemProperty().addListener(
                         	    	        (observable, oldValue, newValue) -> {
                         	    	            if (newValue != null) {
@@ -215,6 +239,8 @@ public class OpenAlbumController
     		ArrayList<Photo> p = a.getPhotoList();
 	    	Photo currPhoto = p.get(selectedIndex);
 	    	
+	    	capT.setText("Caption: " + currPhoto.getCaption());
+    		dateTimeT.setText("Date/Time: " + currPhoto.getLastModDate());
 	    	tags.addAll(currPhoto.getTags());
     	}
     	
@@ -243,11 +269,11 @@ public class OpenAlbumController
     @FXML
     public void addTag(ActionEvent event)
     {
-    	if(dropDownTagCategory.getSelectionModel().getSelectedIndex() == 0)
+    	if(dropDownTagCategory.getSelectionModel().getSelectedIndex() == 0 || tagValue.getText().trim() == "")
     	{
     		Alert confirm = new Alert(Alert.AlertType.ERROR);
     		confirm.setTitle("ERROR!!!");
-    		confirm.setContentText("No Tag Category selected!!!");
+    		confirm.setContentText("Tag Category or Value not entered!!!");
     		confirm.setHeaderText(null);
     		confirm.setResizable(false);
     		confirm.getButtonTypes().setAll(ButtonType.OK);
@@ -300,6 +326,7 @@ public class OpenAlbumController
     	    	
     	    	currPhoto.addTag(newTag);
                 tags.add(newTag.toString());
+                currPhoto.setLastModDate(LocalDateTime.now().format(DateTimeFormatter.ofPattern("MM/dd/yyyy hh:mm a")));
                 tagsList.getSelectionModel().select(newTag.toString());
 				removeTagB.setDisable(false);
             	//int index = categories.indexOf(str);
@@ -331,11 +358,11 @@ public class OpenAlbumController
     	titleBox.setSpacing(10);
 
     	// Add label and toggle switch for number of tags allowed
-    	Label label = new Label("Number of Tags Allowed: ");
+    	Label label = new Label("Number of Values Allowed: ");
     	ToggleGroup toggleGroup = new ToggleGroup();
-    	RadioButton multipleTagsRadioButton = new RadioButton("Multiple Tags");
+    	RadioButton multipleTagsRadioButton = new RadioButton("Multiple Values");
     	multipleTagsRadioButton.setSelected(true); // Default to multiple tags
-    	RadioButton singleTagRadioButton = new RadioButton("Single Tag Only");
+    	RadioButton singleTagRadioButton = new RadioButton("Single Values");
     	singleTagRadioButton.setSelected(false);
     	multipleTagsRadioButton.setToggleGroup(toggleGroup);
     	singleTagRadioButton.setToggleGroup(toggleGroup);
@@ -409,6 +436,7 @@ public class OpenAlbumController
 		    	
 		    	currPhoto.removeTag(tag);
 		    	tags.remove(tag);
+                currPhoto.setLastModDate(LocalDateTime.now().format(DateTimeFormatter.ofPattern("MM/dd/yyyy hh:mm a")));
 				
 				if(tags.isEmpty())
 				{
@@ -451,21 +479,54 @@ public class OpenAlbumController
             }
             else
             {
-            	String captionNm = null;
-            	TextInputDialog captionDialog = new TextInputDialog();
-                captionDialog.setTitle("Add Photo Details: ");
-                captionDialog.setHeaderText(null);
-                captionDialog.setContentText("Please enter caption name. If you are not sure you can add a caption later.");
-                captionDialog.getDialogPane().getButtonTypes().setAll(ButtonType.OK);
-                Optional<String> captionResult = captionDialog.showAndWait();
-                
-                if(captionResult.isPresent())
-                {
-                    captionNm = captionResult.get();
-                }
+            	Photo addP = null;
+            	User currUser = UserDataController.getCurrentSessionUser();
+            	ArrayList<Album> a1 = currUser.getAlbumList();
+            	boolean dup = false;
+            	for(Album tempA: a1)
+            	{
+            		ArrayList<Photo> p1 = tempA.getPhotoList();
+            		for(Photo tempP: p1)
+            		{
+            			if(tempP.getImagePath().equals(imagePath))
+            			{
+            				addP = tempP;
+            				dup = true;
+            			}
+            		}
+            	}
             	
-            	photos.add(imagePath);
-                a.addPhotos(new Photo(captionNm, imagePath, LocalDateTime.now().format(DateTimeFormatter.ofPattern("MM/dd/yyyy hh:mm a"))));
+            	if(!dup)
+            	{
+	            	String captionNm = null;
+	            	TextInputDialog captionDialog = new TextInputDialog();
+	                captionDialog.setTitle("Add Photo Details: ");
+	                captionDialog.setHeaderText(null);
+	                captionDialog.setContentText("Please enter caption name. If you are not sure you can add a caption later.");
+	                captionDialog.getDialogPane().getButtonTypes().setAll(ButtonType.OK);
+	                Optional<String> captionResult = captionDialog.showAndWait();
+	                
+	                if(captionResult.isPresent())
+	                {
+	                    captionNm = captionResult.get();
+	                    capT.setText("Caption: " + captionNm);
+	                }
+	                else
+	                {
+	                	capT.setText("Caption: ");
+	                }
+	                String dt = LocalDateTime.now().format(DateTimeFormatter.ofPattern("MM/dd/yyyy hh:mm a"));
+	                dateTimeT.setText("Date/Time: " + dt);
+	            	
+	            	photos.add(imagePath);
+	                a.addPhotos(new Photo(captionNm, imagePath, dt));
+            	}
+            	else
+            	{
+            		photos.add(addP.getImagePath());
+            		a.addPhotos(addP);
+            	}
+                
                 int index = photos.indexOf(imagePath);
                 allPhotosList.getSelectionModel().select(index);
                 photoDisplay.setImage(new Image("file:" + imagePath));
@@ -612,7 +673,12 @@ public class OpenAlbumController
 	    			{
 	    				allPhotosList.getSelectionModel().clearSelection();
 	    		        allPhotosList.getSelectionModel().select(selectedID);
-	                    photoDisplay.setImage(new Image("file:" + allPhotosList.getSelectionModel().getSelectedItem()));
+	    		        String cdt = allPhotosList.getSelectionModel().getSelectedItem();
+	    		        Photo curr = p.get(selectedID);
+	    		        capT.setText("Caption: " + curr.getCaption());
+	    		        dateTimeT.setText("Date/Time: " + curr.getLastModDate());
+	    		        
+	                    photoDisplay.setImage(new Image("file:" + cdt));
 	                    photoDisplay.setPreserveRatio(true);
 	    			}
 	    			else
@@ -734,6 +800,8 @@ public class OpenAlbumController
 	                ArrayList<Photo> p = a.getPhotoList();
             		int selectedIndex = allPhotosList.getSelectionModel().getSelectedIndex();
             		Photo currPhoto = p.get(selectedIndex);
+            		capT.setText("Caption: " + currPhoto.getCaption());
+            		dateTimeT.setText("Date/Time: " + currPhoto.getLastModDate());
         	    	tags.addAll(currPhoto.getTags());
 				}
 				else
