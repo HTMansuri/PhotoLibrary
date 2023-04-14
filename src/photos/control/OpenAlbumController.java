@@ -356,6 +356,7 @@ public class OpenAlbumController
 	    	int selectedID = allPhotosList.getSelectionModel().getSelectedIndex();
 	    	ArrayList<Photo> p = a.getPhotoList();
 	    	Photo toCopyPhoto = p.get(selectedID);
+	    	Photo ref = toCopyPhoto;
 	    	
 	    	String selectedItem = dropDownMoveCopy.getSelectionModel().getSelectedItem();
 	    	Album toCopyAlbum = a.getAlbum(selectedItem);
@@ -381,7 +382,7 @@ public class OpenAlbumController
 	    		confirm.getButtonTypes().setAll(ButtonType.OK, ButtonType.CANCEL);
 	    		Optional<ButtonType> result = confirm.showAndWait();
 	    		if(result.get() == ButtonType.OK)
-	    			toCopyAlbum.addPhotos(toCopyPhoto);
+	    			toCopyAlbum.addPhotos(ref);
 	    	}
 	    	else
 	    	{
