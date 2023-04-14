@@ -345,14 +345,46 @@ public class AllAlbumsController
     {
     	Stage popup = new Stage();
         popup.initModality(Modality.APPLICATION_MODAL);
-        popup.setTitle("Tag Pair Search");
+        popup.setTitle("Tag Pair Search: ");
         popup.setResizable(false);
         // Create the UI elements for the popup
-        Label categoryLabel = new Label("Select Tag Category:");
+        
+        VBox v1 = new VBox();
+        Label categoryLabel = new Label("Select Tag Category 1:");
         ChoiceBox<String> categoryChoiceBox = new ChoiceBox<>(categories);
         categoryChoiceBox.getSelectionModel().selectFirst();
         Label tagLabel = new Label("Tag Value:");
         TextField tagTextField = new TextField();
+        v1.getChildren().addAll(categoryLabel, categoryChoiceBox, tagLabel, tagTextField);
+        v1.setAlignment(Pos.CENTER);
+        v1.setSpacing(10);
+        v1.setPadding(new Insets(10));
+        
+        VBox vm = new VBox();
+        ChoiceBox<String> cbs = new ChoiceBox<>();
+        cbs.getItems().add(0, "--Select--");
+        cbs.getItems().add(1, "AND");
+        cbs.getItems().add(2, "OR");
+        cbs.getSelectionModel().select(0);
+        vm.getChildren().add(cbs);
+        vm.setAlignment(Pos.CENTER);
+        vm.setSpacing(80);
+        vm.setPadding(new Insets(10));
+        
+        VBox v2 = new VBox();
+        Label categoryLabel2 = new Label("Select Tag Category 1:");
+        ChoiceBox<String> categoryChoiceBox2 = new ChoiceBox<>(categories);
+        categoryChoiceBox.getSelectionModel().selectFirst();
+        Label tagLabel2 = new Label("Tag Value:");
+        TextField tagTextField2 = new TextField();
+        v2.getChildren().addAll(categoryLabel2, categoryChoiceBox2, tagLabel2, tagTextField2);
+        v2.setAlignment(Pos.CENTER);
+        v2.setSpacing(10);
+        v2.setPadding(new Insets(10));
+        
+        HBox h = new HBox();
+        h.getChildren().addAll(v1, vm, v2);
+        
         Button searchButton = new Button("Search");
         searchButton.setOnAction(e -> {
             String category = categoryChoiceBox.getValue();
@@ -391,16 +423,18 @@ public class AllAlbumsController
         });
         
         // Add UI elements to the popup window
-        VBox vbox = new VBox(categoryLabel, categoryChoiceBox, tagLabel, tagTextField, searchButton);
-        vbox.setAlignment(Pos.CENTER);
-        vbox.setSpacing(10);
-        vbox.setPadding(new Insets(10));
-        popup.setScene(new Scene(vbox));
+        // VBox vbox = new VBox(categoryLabel, categoryChoiceBox, tagLabel, tagTextField, searchButton);
+        vm.getChildren().add(searchButton);
+        h.setAlignment(Pos.CENTER);
+        h.setSpacing(10);
+        h.setPadding(new Insets(10));
+        popup.setScene(new Scene(h));
         popup.showAndWait();
     }
     
     @FXML
-    public void dateRangeSearch(ActionEvent event) {
+    public void dateRangeSearch(ActionEvent event) 
+    {
         // Create a new popup window
         Stage popup = new Stage();
         popup.initModality(Modality.APPLICATION_MODAL);
