@@ -5,6 +5,7 @@ import java.io.Serializable;
 public class TagCategory implements Serializable {
 	private static final long serialVersionUID = 6L;
 	private String categoryName;
+	private boolean singlular;
 	
 	public class Tag implements Serializable {
 		private static final long serialVersionUID = 5L;
@@ -31,6 +32,13 @@ public class TagCategory implements Serializable {
 	{
 		this.setCategoryName(name);
 	}
+	
+	public TagCategory(String name, Boolean singular)
+	{
+		this.setCategoryName(name);
+		this.singlular = singular;
+	}
+	
 	public String getCategoryName() {
 		return categoryName;
 	}
@@ -40,6 +48,12 @@ public class TagCategory implements Serializable {
 	}
 	public String toString() {
 		return this.categoryName;
+	}
+	public boolean isSinglular() {
+		return singlular;
+	}
+	public void setSinglular(boolean singlular) {
+		this.singlular = singlular;
 	}
 	
 }

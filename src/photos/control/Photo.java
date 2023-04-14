@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import photos.control.TagCategory.Tag;
 
@@ -73,5 +74,18 @@ public class Photo implements Serializable
 	public void setLastModDate(String lastModDate)
 	{
 		this.lastModDate = lastModDate;
+	}
+	
+	public void removeTag(String selectedTag) 
+	{
+	    Iterator<Tag> iterator = tags.iterator();
+	    while(iterator.hasNext())
+	    {
+	        Tag t = iterator.next();
+	        if(t.toString().equals(selectedTag))
+	        {
+	            iterator.remove();
+	        }
+	    }
 	}
 }

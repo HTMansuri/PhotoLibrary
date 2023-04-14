@@ -6,6 +6,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Optional;
+import java.util.function.Predicate;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -19,8 +20,10 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
+import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextInputDialog;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
@@ -66,10 +69,37 @@ public class OpenAlbumController
 	@FXML
 	private Button slideshowB;
 	
+	@FXML
+	private Button removeTagB;
+	
     public void start()
 	{
     	tags = FXCollections.observableArrayList();
     	tagsList.setItems(tags);
+    	
+    	tagsList.getSelectionModel().selectedItemProperty().addListener(
+    	        (observable, oldValue, newValue) -> {
+    	            if (newValue != null) {
+    	                String selectedString = newValue.toString();
+    	                String categoryName = selectedString.substring(0, selectedString.indexOf(":")).trim();
+    	                String tagValueStr = selectedString.substring(selectedString.indexOf(":")+1).trim();
+
+    	                // Set the selected category in the dropDownTagCategory choice box
+    	                dropDownTagCategory.getSelectionModel().select(categoryName);
+
+    	                // Set the tagValue in the tagValue text field
+    	                tagValue.setText(tagValueStr);
+    	            }
+    	        });
+    	
+    	if(tags.isEmpty())
+    	{
+			removeTagB.setDisable(true);
+    	}
+    	else
+    	{
+    		removeTagB.setDisable(false);
+    	}
     	
     	allPhotosList.setCellFactory(new Callback<ListView<String>, ListCell<String>>()
     	{
@@ -128,6 +158,31 @@ public class OpenAlbumController
                             		int selectedIndex = allPhotosList.getSelectionModel().getSelectedIndex();
                             		Photo currPhoto = p.get(selectedIndex);
                         	    	tags.addAll(currPhoto.getTags());
+                        	    	if(tags.isEmpty())
+                        	    	{
+                        				removeTagB.setDisable(true);
+                        	    	}
+                        	    	else
+                        	    	{
+                        	    		removeTagB.setDisable(false);
+                        	    	}
+
+                    	    		tagValue.clear();
+                    	    		dropDownTagCategory.getSelectionModel().select(0);
+                        	    	tagsList.getSelectionModel().selectedItemProperty().addListener(
+                        	    	        (observable, oldValue, newValue) -> {
+                        	    	            if (newValue != null) {
+                        	    	                String selectedString = newValue.toString();
+                        	    	                String categoryName = selectedString.substring(0, selectedString.indexOf(":")).trim();
+                        	    	                String tagValueStr = selectedString.substring(selectedString.indexOf(":")+1).trim();
+
+                        	    	                // Set the selected category in the dropDownTagCategory choice box
+                        	    	                dropDownTagCategory.getSelectionModel().select(categoryName);
+
+                        	    	                // Set the tagValue in the tagValue text field
+                        	    	                tagValue.setText(tagValueStr);
+                        	    	            }
+                        	    	        });
                             	}
                             });
                         }
@@ -216,6 +271,25 @@ public class OpenAlbumController
             		}
             	}
             	
+            	Boolean isSingularCategory = selectedCategory.isSinglular();
+            	
+            	if(isSingularCategory) {
+            		String check = selectedCategoryName;
+            		Predicate<String> duplicate = (String s) -> (s.substring(0, s.indexOf(":")).trim().equals(check.trim()));
+            		if(tags.stream().anyMatch(duplicate))
+            		{
+            			Alert confirm = new Alert(Alert.AlertType.ERROR);
+                		confirm.setTitle("ERROR!!!");
+                		confirm.setContentText("Multiples Tags for Tag Category \"" + selectedCategoryName + "\" is not allowed!!!");
+                		confirm.setHeaderText(null);
+                		confirm.setResizable(false);
+                		confirm.getButtonTypes().setAll(ButtonType.OK);
+                		confirm.showAndWait();
+                		return;
+            		}
+            			
+            	}
+            	
             	TagCategory.Tag newTag = selectedCategory.new Tag(value);
             	
             	Album a = User.getCurrentSessionAlbum();
@@ -224,7 +298,9 @@ public class OpenAlbumController
     	    	Photo currPhoto = p.get(selectedID);
     	    	
     	    	currPhoto.addTag(newTag);
-                tags.add(selectedCategoryName+" : "+value);
+                tags.add(newTag.toString());
+                tagsList.getSelectionModel().select(newTag.toString());
+				removeTagB.setDisable(false);
             	//int index = categories.indexOf(str);
                 //tagsList.getSelectionModel().select(index);
             	//displayalbum();
@@ -245,27 +321,63 @@ public class OpenAlbumController
     public void addTagCategory(ActionEvent event)
     {
     	TextInputDialog dialog = new TextInputDialog();
-        dialog.setTitle("Create New Tag Category");
-        dialog.setHeaderText("Enter the tag category title: ");
-        
-        dialog.showAndWait().ifPresent(str ->
-        {
-            if(!categories.contains(str))
-            {
-            	TagCategory newCategory = new TagCategory(str);
+    	dialog.setTitle("Create New Tag Category");
+    	dialog.setHeaderText(null);
+    	// Add label and text field for tag category title
+    	Label titleLabel = new Label("Enter the tag category title: ");
+    	TextField titleTextField = new TextField();
+    	HBox titleBox = new HBox(titleLabel, titleTextField);
+    	titleBox.setSpacing(10);
+
+    	// Add label and toggle switch for number of tags allowed
+    	Label label = new Label("Number of Tags Allowed: ");
+    	ToggleGroup toggleGroup = new ToggleGroup();
+    	RadioButton multipleTagsRadioButton = new RadioButton("Multiple Tags");
+    	multipleTagsRadioButton.setSelected(true); // Default to multiple tags
+    	RadioButton singleTagRadioButton = new RadioButton("Single Tag Only");
+    	singleTagRadioButton.setSelected(false);
+    	multipleTagsRadioButton.setToggleGroup(toggleGroup);
+    	singleTagRadioButton.setToggleGroup(toggleGroup);
+    	HBox hbox = new HBox(label, multipleTagsRadioButton, singleTagRadioButton);
+    	hbox.setSpacing(10);
+
+    	// Add both boxes to a VBox
+    	VBox vbox = new VBox(titleBox, hbox);
+    	vbox.setSpacing(20);
+    	dialog.getDialogPane().setContent(vbox);
+
+    	dialog.showAndWait().ifPresent(str -> 
+    	{
+    	    String newCategoryName = titleTextField.getText().trim();
+    	    
+    	    if(!categories.contains(newCategoryName))
+    	    {
+            	// Get number of tags allowed based on toggle switch selection
+                boolean isSingular = singleTagRadioButton.isSelected();
+                
+            	TagCategory newCategory = new TagCategory(newCategoryName);
+            	newCategory.setSinglular(isSingular);
             	User currentUser = UserDataController.getCurrentSessionUser();
                 currentUser.addTagCategory(newCategory);
-                categories.add(str);
+                categories.add(newCategoryName);
             	//int index = categories.indexOf(str);
                 //tagsList.getSelectionModel().select(index);
             	//displayalbum();
             }
+    	    else if(newCategoryName.isBlank())
+    	    {
+        		Alert alert = new Alert(AlertType.ERROR);
+        		alert.setTitle("Invalid Tag Category!!!");
+        		alert.setHeaderText("Please enter a valid Tag Category Name!!!");
+        		alert.showAndWait();
+        		addTagCategory(event);
+    	    }
             else
             {
             	Alert alert = new Alert(AlertType.ERROR);
                 alert.setTitle("Duplicate Tag Category");
                 alert.setHeaderText(null);
-                alert.setContentText("A tag category with the name \"" + str + "\" already exists.");
+                alert.setContentText("A tag category with the name \"" + newCategoryName + "\" already exists.");
                 alert.showAndWait();
                 addTagCategory(event);
             }
@@ -275,6 +387,42 @@ public class OpenAlbumController
     @FXML
     public void removeTag(ActionEvent event)
     {
+    	String tagCategory = dropDownTagCategory.getSelectionModel().getSelectedItem();
+    	String tag = tagCategory + " : " + tagValue.getText();
+    	
+    	if(tags.contains(tag))
+		{
+			Alert confirm = new Alert(Alert.AlertType.WARNING);
+			confirm.setTitle("WARNING!!!");
+			confirm.setContentText("Are you sure you want to delete selected Tag?");
+			confirm.setHeaderText(null);
+			confirm.setResizable(false);
+			confirm.getButtonTypes().setAll(ButtonType.OK, ButtonType.CANCEL);
+			Optional<ButtonType> result = confirm.showAndWait();
+			if(result.get() == ButtonType.OK)
+			{
+				Album a = User.getCurrentSessionAlbum();
+				int selectedID = allPhotosList.getSelectionModel().getSelectedIndex();
+		    	ArrayList<Photo> p = a.getPhotoList();
+		    	Photo currPhoto = p.get(selectedID);
+		    	
+		    	currPhoto.removeTag(tag);
+		    	tags.remove(tag);
+				
+				if(tags.isEmpty())
+				{
+					dropDownTagCategory.getSelectionModel().select(0);
+					tagValue.clear();
+					removeTagB.setDisable(true);
+				}
+			}
+		}
+    	else {
+    		Alert alert = new Alert(AlertType.ERROR);
+    		alert.setTitle("Invalid Tag Values!!!");
+    		alert.setHeaderText("No Tag with provided tag-category and tag-value exists!!!");
+    		alert.showAndWait();
+    	}
     	
     }
     
