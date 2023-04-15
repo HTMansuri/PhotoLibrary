@@ -16,14 +16,33 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
+/** 
+ * The UserDataController class represents a controller for handling user data in the system.
+ * This class is responsible for managing the list of users, adding and deleting users, and reading and writing user data to a file.
+ * It also provides methods for setting and retrieving the current session user.
+ * This class implements the Serializable interface to allow for serialization of user data to a file.
+ * 
+ * @author Huzaif Mansuri, Pavitra Patel
+ * 
+ */
 public class UserDataController implements Serializable
 {
+	/**
+	 * A unique identifier for the serialized version of this class.
+	 */
 	private static final long serialVersionUID = 1L;
 	private static UserDataController instance = null;
 	private ArrayList<User> users;
 	
+	/**
+	 * The singleton instance of the UserDataController class.
+	 */
 	public static User currentSessionUser;
 	
+	/**
+	 * Initializes a new instance of the UserDataController class.
+	 * This constructor creates a default user 'stock' and initializes it with a default album containing stock photos.
+	 */
 	private UserDataController()
 	{
 		users = new ArrayList<>();
@@ -49,6 +68,12 @@ public class UserDataController implements Serializable
     	stockAlbum.addPhotos(p5);
 	}
 	
+	/**
+	 * Returns the singleton instance of the UserDataController class.
+	 * If the instance does not exist, it creates a new one.
+	 *
+	 * @return the singleton instance of the UserDataController class.
+	 */
 	public static UserDataController getInstance()
 	{
 		if(instance == null)
@@ -58,11 +83,21 @@ public class UserDataController implements Serializable
 		return instance;
 	}
 	
+	/**
+	 * Adds a new user to the list of users.
+	 *
+	 * @param u the user to be added.
+	 */
 	public void addUser(User u)
 	{
 		users.add(u);
 	}
 	
+	/**
+	 * Deletes a user from the list of users based on the provided username.
+	 *
+	 * @param username the username of the user to be deleted.
+	 */
 	public void deleteUser(String username)
 	{
 		for(User user : users)
@@ -74,6 +109,11 @@ public class UserDataController implements Serializable
 		}
 	}
 	
+	/**
+	 * Returns a list of usernames of all the users in the system.
+	 *
+	 * @return a list of usernames of all the users in the system.
+	 */
 	public ArrayList<String> getUsernames()
 	{
 		ArrayList<String> usernames = new ArrayList<String>();
@@ -83,6 +123,13 @@ public class UserDataController implements Serializable
 		}
 		return usernames;
 	}
+	
+	/**
+	 * Checks if the list of users contains a user with the provided username.
+	 *
+	 * @param u the username to be checked.
+	 * @return true if the user exists, false otherwise.
+	 */
 	public boolean containsUser(String u)
 	{
 		for(User user: users)
@@ -95,6 +142,11 @@ public class UserDataController implements Serializable
 		return false;
 	}
 	
+	/**
+	 * Reads user data from a file and returns the corresponding UserDataController instance.
+	 *
+	 * @return the UserDataController instance containing the user data read from a file.
+	 */
 	public static UserDataController readFromAFile()
 	{
 		UserDataController loadUsers = UserDataController.getInstance();
@@ -127,6 +179,9 @@ public class UserDataController implements Serializable
 		return loadUsers;
 	}
 	
+	/**
+	 * Writes the current user data to a file.
+	 */
 	public void writeToAFile()
 	{
 		try(ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("data/users.ser")))
@@ -138,7 +193,12 @@ public class UserDataController implements Serializable
             e.printStackTrace();
         }
 	}
-
+	
+	/**
+	 * Sets the current session user based on the provided username.
+	 *
+	 * @param user the username of the user to be set as the current session user.
+	 */
 	public void setCurrentSessionUser(String user)
 	{
 		for(User allUser: users)
@@ -150,6 +210,11 @@ public class UserDataController implements Serializable
 		}
 	}
 	
+	/**
+	 * Returns the current session user.
+	 *
+	 * @return the current session user.
+	 */
 	public static User getCurrentSessionUser()
 	{
 		return currentSessionUser;
