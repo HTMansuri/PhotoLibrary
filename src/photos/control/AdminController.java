@@ -45,7 +45,7 @@ public class AdminController
 	 */
     public void create(ActionEvent event)
     {
-    	String username = userName.getText();
+    	String username = userName.getText().trim();
     	User user = new User(username);
     	if(UserDataController.getInstance().containsUser(username))
     	{

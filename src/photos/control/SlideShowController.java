@@ -15,6 +15,8 @@ import javafx.stage.Stage;
 
 /**
  * The SlideShowController class controls the image slide show for an album in the photo library application.
+ * 
+ * @author Huzaif Mansuri, Pavitra Patel
  */
 public class SlideShowController {
 

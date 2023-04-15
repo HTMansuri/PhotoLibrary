@@ -285,7 +285,7 @@ public class OpenAlbumController
     	{
 			
 	    	String selectedCategoryName = dropDownTagCategory.getSelectionModel().getSelectedItem();
-	    	String value = tagValue.getText();
+	    	String value = tagValue.getText().trim();
 	    	
 	    	if(!tags.contains(selectedCategoryName+" : "+value)) {
 	    		User currentUser = UserDataController.getCurrentSessionUser();
@@ -331,6 +331,8 @@ public class OpenAlbumController
                 currPhoto.setLastModDate(LocalDateTime.now().format(DateTimeFormatter.ofPattern("MM/dd/yyyy hh:mm a")));
                 tagsList.getSelectionModel().select(newTag.toString());
 				removeTagB.setDisable(false);
+				allPhotosList.getSelectionModel().clearSelection();
+				allPhotosList.getSelectionModel().select(selectedID);
             	//int index = categories.indexOf(str);
                 //tagsList.getSelectionModel().select(index);
             	//displayalbum();
@@ -450,8 +452,9 @@ public class OpenAlbumController
 		    	currPhoto.removeTag(tag);
 		    	tags.remove(tag);
                 currPhoto.setLastModDate(LocalDateTime.now().format(DateTimeFormatter.ofPattern("MM/dd/yyyy hh:mm a")));
-				
-				if(tags.isEmpty())
+                allPhotosList.getSelectionModel().clearSelection();
+				allPhotosList.getSelectionModel().select(selectedID);
+            	if(tags.isEmpty())
 				{
 					dropDownTagCategory.getSelectionModel().select(0);
 					tagValue.clear();

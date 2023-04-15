@@ -39,7 +39,7 @@ public class LoginController
     public void Login(ActionEvent event)
     {
     	boolean userNotFound = false;
-    	String user = userName.getText();
+    	String user = userName.getText().trim();
     	if(user.equals("admin"))
     	{
             try
