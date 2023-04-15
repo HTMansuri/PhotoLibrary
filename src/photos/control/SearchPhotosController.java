@@ -98,23 +98,59 @@ public class SearchPhotosController {
     }
 
     @FXML
-    void tagPairsSearch(ActionEvent event) 
+    public void tagPairsSearch(ActionEvent event) 
     {
     	Stage popup = new Stage();
         popup.initModality(Modality.APPLICATION_MODAL);
-        popup.setTitle("Tag Pair Search");
+        popup.setTitle("Tag Pair Search: ");
         popup.setResizable(false);
         // Create the UI elements for the popup
-        Label categoryLabel = new Label("Select Tag Category:");
+        
+        VBox v1 = new VBox();
+        Label categoryLabel = new Label("Select Tag Category 1:");
         ChoiceBox<String> categoryChoiceBox = new ChoiceBox<>(categories);
         categoryChoiceBox.getSelectionModel().selectFirst();
         Label tagLabel = new Label("Tag Value:");
         TextField tagTextField = new TextField();
+        v1.getChildren().addAll(categoryLabel, categoryChoiceBox, tagLabel, tagTextField);
+        v1.setAlignment(Pos.CENTER);
+        v1.setSpacing(10);
+        v1.setPadding(new Insets(10));
+        
+        VBox vm = new VBox();
+        ChoiceBox<String> cbs = new ChoiceBox<>();
+        cbs.getItems().add(0, "--Select--");
+        cbs.getItems().add(1, "AND");
+        cbs.getItems().add(2, "OR");
+        cbs.getSelectionModel().select(0);
+        vm.getChildren().add(cbs);
+        vm.setAlignment(Pos.CENTER);
+        vm.setSpacing(80);
+        vm.setPadding(new Insets(10));
+        
+        VBox v2 = new VBox();
+        Label categoryLabel2 = new Label("Select Tag Category 1:");
+        ChoiceBox<String> categoryChoiceBox2 = new ChoiceBox<>(categories);
+        categoryChoiceBox2.getSelectionModel().selectFirst();
+        Label tagLabel2 = new Label("Tag Value:");
+        TextField tagTextField2 = new TextField();
+        v2.getChildren().addAll(categoryLabel2, categoryChoiceBox2, tagLabel2, tagTextField2);
+        v2.setAlignment(Pos.CENTER);
+        v2.setSpacing(10);
+        v2.setPadding(new Insets(10));
+        
+        HBox h = new HBox();
+        h.getChildren().addAll(v1, vm, v2);
+        
         Button searchButton = new Button("Search");
         searchButton.setOnAction(e -> {
             String category = categoryChoiceBox.getValue();
             String tagValue = tagTextField.getText();
             String tagStr = category + " : " + tagValue;
+            String category2 = categoryChoiceBox2.getValue();
+            String tagValue2 = tagTextField2.getText();
+            String tagStr2 = category2 + " : " + tagValue2;
+            String operator = cbs.getValue();
             // Load the searchPhotos.fxml file and pass the tag pair to the controller
             if(categoryChoiceBox.getSelectionModel().getSelectedIndex() == 0)
         	{
@@ -130,20 +166,46 @@ public class SearchPhotosController {
                 alert.setHeaderText("Please Enter a Valid Tag Value!");
                 alert.showAndWait();
         	}
+            else if(categoryChoiceBox2.getSelectionModel().getSelectedIndex() != 0 && tagValue2.isBlank())
+            {
+            	Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Invalid Tag Pair!!!");
+                alert.setHeaderText("Please Enter a Valid Tag Value!");
+                alert.showAndWait();
+            }
+            else if(cbs.getSelectionModel().getSelectedIndex()==0 && categoryChoiceBox2.getSelectionModel().getSelectedIndex() != 0 && !tagValue2.isBlank())
+            {
+            	Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Invalid Search!!!");
+                alert.setHeaderText("Please Select a Valid Conjunction/Disjunction Operator!");
+                alert.showAndWait();
+            }
+            else if(categoryChoiceBox2.getSelectionModel().getSelectedIndex() == 0 && !tagValue2.isBlank())
+            {
+            	Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Invalid Tag Pair!!!");
+                alert.setHeaderText("Please Enter a Valid Tag Value!");
+                alert.showAndWait();
+            }
             else 
             {
 	            popup.close();
 	            photos.clear();
-	            search(null, null, tagStr, null, null);
+	            if(categoryChoiceBox2.getSelectionModel().getSelectedIndex() == 0) {
+                	tagStr2 = null;
+                	operator = null;
+                }
+                search(null, null, tagStr, operator, tagStr2);
 	        }
         });
         
-        // Add UI elements to the popup window
-        VBox vbox = new VBox(categoryLabel, categoryChoiceBox, tagLabel, tagTextField, searchButton);
-        vbox.setAlignment(Pos.CENTER);
-        vbox.setSpacing(10);
-        vbox.setPadding(new Insets(10));
-        popup.setScene(new Scene(vbox));
+     // Add UI elements to the popup window
+        // VBox vbox = new VBox(categoryLabel, categoryChoiceBox, tagLabel, tagTextField, searchButton);
+        vm.getChildren().add(searchButton);
+        h.setAlignment(Pos.CENTER);
+        h.setSpacing(10);
+        h.setPadding(new Insets(10));
+        popup.setScene(new Scene(h));
         popup.showAndWait();
     }
 
@@ -284,10 +346,17 @@ public class SearchPhotosController {
 	// Call this method to display the photos in the searchPhotosList ListView
 	public void displayPhotos() {
 	    // Load the images from the image paths
+		if(photos.isEmpty())
+		{
+			Label noResultsLabel = new Label("No Search Results Exist.");
+            noResultsLabel.setStyle("-fx-text-fill: gray;");
+            searchPhotosList.setPlaceholder(noResultsLabel);
+		}
 	    List<Image> images = new ArrayList<>();
 	    for (String imagePath : photos) {
 	        images.add(new Image("file:"+imagePath));
 	    }
+	    
 
 	    // Set the cell factory to display the ImageViews in the ListView
 	    searchPhotosList.setCellFactory(param -> new ListCell<String>() {

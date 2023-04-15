@@ -1,4 +1,3 @@
-//disappear buttons when no photo in list - optional or add alerts
 package photos.control;
 
 import java.io.File;
@@ -84,6 +83,7 @@ public class OpenAlbumController
     	tags = FXCollections.observableArrayList();
     	tagsList.setItems(tags);
     	
+    	
     	tagsList.getSelectionModel().selectedItemProperty().addListener(
     	        (observable, oldValue, newValue) -> 
     	        {
@@ -100,15 +100,6 @@ public class OpenAlbumController
     	                tagValue.setText(tagValueStr);
     	            }
     	        });
-    	
-    	if(tags.isEmpty())
-    	{
-			removeTagB.setDisable(true);
-    	}
-    	else
-    	{
-    		removeTagB.setDisable(false);
-    	}
     	
     	allPhotosList.setCellFactory(new Callback<ListView<String>, ListCell<String>>()
     	{
@@ -263,6 +254,14 @@ public class OpenAlbumController
     		managePhotoAP.setVisible(false);
     		slideshowB.setDisable(true);
     	}
+    	if(tags.isEmpty())
+    	{
+			removeTagB.setDisable(true);
+    	}
+    	else
+    	{
+    		removeTagB.setDisable(false);
+    	}
     }
     
     @FXML
@@ -414,9 +413,9 @@ public class OpenAlbumController
     @FXML
     public void removeTag(ActionEvent event)
     {
-    	String tagCategory = dropDownTagCategory.getSelectionModel().getSelectedItem();
-    	String tag = tagCategory + " : " + tagValue.getText();
-    	
+    	//String tagCategory = dropDownTagCategory.getSelectionModel().getSelectedItem();
+    	//String tag = tagCategory + " : " + tagValue.getText();
+    	String tag = tagsList.getSelectionModel().getSelectedItem();
     	if(tags.contains(tag))
 		{
 			Alert confirm = new Alert(Alert.AlertType.WARNING);
