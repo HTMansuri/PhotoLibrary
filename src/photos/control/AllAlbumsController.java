@@ -440,10 +440,6 @@ public class AllAlbumsController
 	                	tagStr2 = null;
 	                	operator = null;
 	                }
-
-	                System.out.println(operator);
-
-	                System.out.println(tagStr2);
 	                controller.search(null, null, tagStr, operator, tagStr2);
 	                Stage mainStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
 	                mainStage.setScene(searchPhotosScene);
