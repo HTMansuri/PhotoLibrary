@@ -1,5 +1,4 @@
 package photos.control;
-
 import java.io.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -11,16 +10,31 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
+/**
+ * This class is the controller for the Login Scene. Once the user clicks Login Button this controller is triggered.
+ * 
+ * @author Pavitra Patel, Huzaif Mansuri
+ */
 public class LoginController
 {
     @FXML
     private TextField userName;
     
+    /**
+     * The start method doesn't perform any initializing tasks for this class
+     */
     public void start()
     {
     	
 	}
     
+    /**
+     * A user can type their username and click Login button. If the username is "admin" the admin is redirected to
+     * Admin scene. If the username is not admin then we get the list of users from the UserDataController and check to
+     * see if the user exists. If the user exists then we open AllAlbums Scene for that user else we show them a warning.
+     * 
+     * @param event		The ActionEvent that is triggered upon selecting "Login" Button
+     */
 	@FXML
     public void Login(ActionEvent event)
     {
@@ -47,10 +61,6 @@ public class LoginController
     		{
     			try
                 {
-//    				Parent allAlbums = FXMLLoader.load(getClass().getResource("../view/AllAlbums.fxml"));
-//    		        Scene allAlbumsScene = new Scene(allAlbums);
-//    		        Stage mainStage = (Stage) userName.getScene().getWindow();
-//    		        mainStage.setScene(allAlbumsScene);
     				FXMLLoader loader = new FXMLLoader(getClass().getResource("../view/AllAlbums.fxml"));
     				Parent allAlbums = loader.load();
     				AllAlbumsController controller = loader.getController();

@@ -1,5 +1,4 @@
 package photos.control;
-
 import java.io.File;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -39,45 +38,46 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 
+/**
+ * This Class is the controller class for the OpenAlbum scene. When a user double clicks on an album this controller is
+ * triggered.
+ * 
+ * @author Pavitra Patel, Huzaif Mansuri
+ */
 public class OpenAlbumController
 {
     @FXML
     private ListView<String> allPhotosList;
-
     @FXML
     private ImageView photoDisplay;
-    
     @FXML
     private ChoiceBox<String> dropDownMoveCopy;
-    
     @FXML
     private AnchorPane managePhotoAP;
-    
     @FXML
     private ChoiceBox<String> dropDownTagCategory;
-    
     @FXML
     private TextField tagValue;
-    
     @FXML
     private ListView<String> tagsList;
-
 	private ObservableList<String> photos;
 	private ObservableList<String> tags;
 	private ObservableList<String> categories;
-	
 	@FXML
 	private Button slideshowB;
-	
 	@FXML
 	private Button removeTagB;
-	
 	@FXML
     private Text capT;
-
     @FXML
     private Text dateTimeT;
 	
+    /**
+     * This is the first method that will be called. This method performs task of observing a List View of tags and Photos.
+     * All the UI components are set to invisible if there are no photos. If there are photos both the List Views are 
+     * populated with their data. The allPhotosList List View is updated to show a image and it's caption. An event 
+     * listener is enabled to display details as per selection of photo on the List view.
+     */
     public void start()
 	{
     	tags = FXCollections.observableArrayList();
@@ -238,9 +238,7 @@ public class OpenAlbumController
     	AllAlbumsController.albums.remove(currentAlbum.getAlbumName());
     	dropDownMoveCopy.getItems().addAll(AllAlbumsController.albums);
     	dropDownMoveCopy.getSelectionModel().selectFirst();
-    	
-    	//dropDownTagCategory.getItems().add(0, "--Select--");
-    	
+    	    	
     	categories = FXCollections.observableArrayList();
     	dropDownTagCategory.setItems(categories);
     	categories.add(0, "--Select--");
@@ -264,6 +262,12 @@ public class OpenAlbumController
     	}
     }
     
+    /**
+     * A user can add upon selecting this button to enter a new tag if and only if it's category and value is defined. 
+     * If not they will get error popup.
+     * 
+     * @param event		The ActionEvent that is triggered on selecting "Add Tag" button
+     */
     @FXML
     public void addTag(ActionEvent event)
     {
@@ -343,6 +347,12 @@ public class OpenAlbumController
     	
     }
 
+    /**
+     * A popup is shown upon selecting this button to enter a new tag category value. A user can specify if 
+     * they want single or multiple values for that category.
+     * 
+     * @param event		The ActionEvent that is triggered on selecting "Add Tag Category" button
+     */
     @FXML
     public void addTagCategory(ActionEvent event)
     {
@@ -410,6 +420,11 @@ public class OpenAlbumController
         });
     }
     
+    /**
+     * A user can remove tag upon selecting this button.
+     * 
+     * @param event		The ActionEvent that is triggered on selecting "Remove Tag" button
+     */
     @FXML
     public void removeTag(ActionEvent event)
     {
@@ -453,6 +468,12 @@ public class OpenAlbumController
     	
     }
     
+    /**
+     * A user can upload a photo. A user can setup a caption for that photo. If the photo already exists in 
+     * other album for that user then the new photo object will be referenced to that photo.
+     * 
+     * @param event 	The ActionEvent that is triggered upon selecting "Add Photo" button
+     */
     @FXML
     public void addPhoto(ActionEvent event)
     {
@@ -535,6 +556,12 @@ public class OpenAlbumController
         }
     }
     
+    /**
+     * Upon selecting a different album, a new Photo object will be added to selected album which will reference 
+     * the selected photo.
+     * 
+     * @param event		The ActionEvent that is triggered upon selecting "Copy" button
+     */
     @FXML
     public void copy(ActionEvent event)
     {
@@ -605,6 +632,15 @@ public class OpenAlbumController
     	}
     }
     
+    /** This method is called when the user clicks on the Move button in the application. It checks whether an album is 
+     * selected from the drop down list. If these condition is not met, an error message is displayed to the user. 
+     * Otherwise, the selected photo is moved to the selected album. If the selected photo already exists in the 
+     * destination album, a warning message is displayed to the user. If the user confirms the move, the photo is 
+     * added to the destination album and removed from the current album. The selected photo is then displayed in the 
+     * UI along with its caption and date/time information. If no photos remain in the album after the move, the UI is 
+     * updated accordingly. 
+     * 
+     * @param event The ActionEvent object that is generated when the Move button is clicked. */
     @FXML
     public void move(ActionEvent event)
     {
@@ -701,6 +737,11 @@ public class OpenAlbumController
     	}
     }
     
+    /** This method is called when the user clicks on the "Re-Caption" button in the application. It prompts the user to 
+     * enter a new caption for the selected photo. The new caption is then set for the selected photo, and the updated 
+     * photo is displayed in the UI along with its new caption. 
+     * 
+     * @param event The ActionEvent object that is generated when the "Re-Caption" button is clicked. */
     @FXML
     public void reCaption(ActionEvent event)
     {
@@ -726,6 +767,10 @@ public class OpenAlbumController
         allPhotosList.getSelectionModel().select(selectedID);
     }
 
+    /** This method is called when the user clicks on the "Back" button in the application. It loads the AllAlbums.fxml 
+     * file and displays the AllAlbums view to the user.
+     * 
+     * @param event 	The ActionEvent object that is generated when the "Back" button is clicked. */
     @FXML
     public void back(ActionEvent event)
     {
@@ -745,6 +790,10 @@ public class OpenAlbumController
     	}
     }
     	
+    /**
+     * A user is directed to Login Scene.
+     * @param event		The ActionEvent that is triggered upon selecting "LogOut" button
+     */
     @FXML
     public void logout(ActionEvent event)
     {
@@ -761,6 +810,11 @@ public class OpenAlbumController
     	}
     }
 
+    /** Removes the currently selected photo from the album and updates the UI accordingly. If there is no photo selected,
+     * does nothing. Prompts the user for confirmation before deleting the photo. 
+     * 
+     * @param event 	The button click event that triggered this method.
+     * */
     @FXML
     public void removePhoto(ActionEvent event)
     {
@@ -813,6 +867,13 @@ public class OpenAlbumController
 		}
     }
     
+    /** This method handles the action event for starting a slideshow of photos in the current album. It first checks 
+     * if there are any photos in the album, and if not, displays an error message. If there are photos, it loads the 
+     * Slideshow.fxml file, initializes the SlideshowController, and starts the slideshow. The current stage is then set 
+     * to display the slideshow. 
+     * 
+     * @param event 	The action event triggered by clicking the "Slideshow" button.
+     */
     @FXML
     public void slideShow(ActionEvent event)
     {
