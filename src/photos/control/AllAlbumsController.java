@@ -63,7 +63,8 @@ public class AllAlbumsController
     /**
      * This is the first method that will be executed after AllAlbums scene opens. The List View allAlbumsList is
      * set to observable list albums. All the albums for that user are populated in the list. In the every row of List
-     * View, we update --
+     * View, we update it to show the last image of the album as cover photo of the album and display it's name. We
+     * setup an event listener that opens the album on double click.
      */
     public void start()
     {
@@ -172,6 +173,10 @@ public class AllAlbumsController
     	categories.addAll(currentUser.getCategoryList());	
 	}
 
+    /**
+     * Creates a new album if and only if the name of the album is not duplicated
+     * @param event		The ActionEvent that is triggered when "Create" button is clicked
+     */
     @FXML
     public void create(ActionEvent event)
     {
@@ -205,6 +210,10 @@ public class AllAlbumsController
         });
     }
 
+    /**
+     * The selected album on the list view gets deleted after the user accepts the popup warning.
+     * @param event		The ActionEvent that is triggered when "Delete" button is clicked
+     */
     @FXML
     public void delete(ActionEvent event)
     {
@@ -242,6 +251,10 @@ public class AllAlbumsController
 		}
     }
 
+    /**
+     * The user is logged out of the session and re-directed to Login Scene
+     * @param event		The ActionEvent that is triggered when "LogOut" button is clicked
+     */
     @FXML
     public void logOut(ActionEvent event)
     {
@@ -258,6 +271,11 @@ public class AllAlbumsController
     	}
     }
 
+    /**
+     * The selected album on the list view can be renamed upon clicking Rename button. A dialog box appears where a user 
+     * inputs new name. If the name is duplicated then the user will get a warning and textbox will re-appear for new input.
+     * @param event		The ActionEvent that is triggered when "Rename" button is clicked
+     */
     @FXML
     public void rename(ActionEvent event)
     {	
@@ -293,6 +311,9 @@ public class AllAlbumsController
     	}
     }
     
+    /**
+     * Displays all the details of the albums such as date range of photos, number of photos, and album name.
+     */
     @FXML
     public void displayalbum()
 	{	
@@ -342,6 +363,14 @@ public class AllAlbumsController
 	    	displayAlbumDetails.getChildren().clear();
 	}
 
+    /**
+     * Displays a popup window for searching photos by tag pairs. The user can select two tag categories and values,
+     * and choose whether to search for photos that have both tags or either tag. The method validates user input 
+     * and displays an error message if necessary. Upon successful validation, the method loads the searchPhotos.fxml 
+     * file and passes the tag pair to the controller.
+     * 
+     * @param event		The ActionEvent that is triggered upon clicking "Search By Tag Pairs" button.
+     */
     @FXML
     public void tagPairsSearch(ActionEvent event)
     {
@@ -463,6 +492,13 @@ public class AllAlbumsController
         popup.showAndWait();
     }
     
+    /** Opens a popup window for searching photos within a specified date range. The user selects a start date and 
+     * end date using JavaFX DatePicker widgets, and then clicks a "Search" button to perform the search. If the date 
+     * range is valid (i.e., the start date is not after the end date and both dates are provided), the 
+     * searchPhotos.fxml file is loaded and the dates are passed to the SearchPhotosController to perform the search. 
+     * If the date range is invalid, an error alert is displayed to the user. 
+     * 
+     * @param event 	The ActionEvent that triggered the method call */
     @FXML
     public void dateRangeSearch(ActionEvent event) 
     {

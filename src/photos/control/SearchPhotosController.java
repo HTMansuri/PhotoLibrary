@@ -1,5 +1,4 @@
 package photos.control;
-
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -34,9 +33,13 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.converter.LocalDateStringConverter;
 
-public class SearchPhotosController {
-
-
+/**
+ * The class is controller for Search Photos Scene
+ * 
+ * @author Pavitra Patel, Huzaif Mansuri
+ */
+public class SearchPhotosController
+{
     @FXML
     private Button createAlbumB;
 
@@ -54,9 +57,14 @@ public class SearchPhotosController {
     private ObservableList<String> categories;
 	
 
-
+    /**
+     * Creates an album based on search results. The album created will have photos referenced to same Photos that 
+     * were displayed
+     * 
+     * @param event		The ActionEvent that triggered upon selecting "Create" button
+     */
     @FXML
-    void createAlbum(ActionEvent event)
+    public void createAlbum(ActionEvent event)
     {
     	if(photos.isEmpty())
     	{
@@ -97,6 +105,14 @@ public class SearchPhotosController {
     	}
     }
 
+    /**
+     * Displays a popup window for searching photos by tag pairs. The user can select two tag categories and values,
+     * and choose whether to search for photos that have both tags or either tag. The method validates user input 
+     * and displays an error message if necessary. Upon successful validation, the method loads the searchPhotos.fxml 
+     * file and passes the tag pair to the controller.
+     * 
+     * @param event		The ActionEvent that is triggered upon clicking "Search By Tag Pairs" button.
+     */
     @FXML
     public void tagPairsSearch(ActionEvent event) 
     {
@@ -209,6 +225,13 @@ public class SearchPhotosController {
         popup.showAndWait();
     }
 
+    /** Opens a popup window for searching photos within a specified date range. The user selects a start date and 
+     * end date using JavaFX DatePicker widgets, and then clicks a "Search" button to perform the search. If the date 
+     * range is valid (i.e., the start date is not after the end date and both dates are provided), the 
+     * searchPhotos.fxml file is loaded and the dates are passed to the SearchPhotosController to perform the search. 
+     * If the date range is invalid, an error alert is displayed to the user. 
+     * 
+     * @param event 	The ActionEvent that triggered the method call */
     @FXML
     void dateRangeSearch(ActionEvent event) {
     	// Create a new popup window
@@ -262,6 +285,11 @@ public class SearchPhotosController {
         popup.showAndWait();
     }
 
+    /**
+     * A user is sent to AllAlbums Scene
+     * 
+     * @param event		The ActionEvent that triggered upon selecting "LogOut" button
+     */
 	 @FXML
 	    public void back(ActionEvent event)
 	    {
@@ -281,6 +309,10 @@ public class SearchPhotosController {
 	    	}
 	    }
 	 
+	 /**
+	  * A user is sent to Login Page
+	  * @param event 	The ActionEvent that triggered upon selecting "LogOut" button
+	  */
 	 @FXML
 	    public void logout(ActionEvent event)
 	    {
@@ -297,6 +329,14 @@ public class SearchPhotosController {
 	    	}
 	    }
 
+	 /**
+	  * The method that searches as per user input
+	  * @param fromDate		The start date for search
+	  * @param toDate		The end date for search
+	  * @param tagStr		The first tag in String format
+	  * @param operator		The AND/OR operater if passed
+	  * @param tagStr2		The second tag in String Format
+	  */
 	public void search(LocalDate fromDate, LocalDate toDate, String tagStr,  String operator, String tagStr2) {
 		//start();
     	
@@ -343,6 +383,9 @@ public class SearchPhotosController {
 	    displayPhotos();
 	}
 	
+	/**
+	 * The method that displays Photos as per user search
+	 */
 	// Call this method to display the photos in the searchPhotosList ListView
 	public void displayPhotos() {
 	    // Load the images from the image paths
@@ -397,7 +440,9 @@ public class SearchPhotosController {
 
 
 
-	
+	/**
+	 * This method acts as initializing the List and is called first when the controller is triggered
+	 */
 	// Initialize the controller
     public void initialize() {
         // Set the adminList to display the userList
