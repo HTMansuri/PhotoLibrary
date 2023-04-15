@@ -18,24 +18,32 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.stage.Stage;
-
+/**
+ * When the admin login, they are redirected to AdminController class. Here they can list, add, and delete users.
+ * 
+ * @author Pavitra Patel, Huzaif Mansuri
+ *
+ */
 public class AdminController
 {
     @FXML
     private ListView<String> adminList;
-    
-    // Use an ObservableList to store the list of users
     private final ObservableList<String> userList = FXCollections.observableArrayList();
-
-
     @FXML
     private TextField userName;
-    
     @FXML
     private Button deleteB;
-
     @FXML
-    void create(ActionEvent event)
+    
+	/**
+	 * Creates a new user with the username entered in the userName TextField. If the username already exists, 
+	 * displays an error message. If the username is blank, displays an error message and clears the userName TextField.
+	 * If the username is valid and not already in the user list, adds it to the user list, selects it in the adminList, 
+	 * adds it to the list of users in the UserDataController, and clears the userName TextField.
+	 * 
+	 * @param event		the ActionEvent triggered by clicking the "Create" button
+	 */
+    public void create(ActionEvent event)
     {
     	String username = userName.getText();
     	User user = new User(username);
@@ -64,8 +72,17 @@ public class AdminController
     	}
     }
 
+    /**
+     * Deletes the user with the username specified in the userName field, if it exists.
+     * If the specified user does not exist, an error message is displayed.
+     * If the deletion is confirmed by the user, the user is removed from the userList and the list of users in 
+     * UserDataController. The userName field is cleared, and if there are no more users in the userList, the 
+     * delete button is disabled.
+     * 
+     * @param event 	the ActionEvent triggered by clicking the "Delete" button
+     */
     @FXML
-    void delete(ActionEvent event)
+    public void delete(ActionEvent event)
     {
     	String username = userName.getText();
     	if(UserDataController.getInstance().containsUser(username)) {
@@ -96,8 +113,13 @@ public class AdminController
     	}
     }
 
+    /**
+     * The admin logs out and returns to the Login Page upon clicking the LogOut button.
+     * 
+     * @param event 	the ActionEvent triggered by clicking the "LogOut" button
+     */
     @FXML
-    void logout(ActionEvent event)
+    public void logout(ActionEvent event)
     {
     	try
     	{
@@ -112,8 +134,13 @@ public class AdminController
     	}
     }
     
-    // Initialize the controller
-    public void initialize() {
+    /**
+     * Initializes the controller by setting the adminList to display the userList, loading the initial list of users
+     * from the list of users from the UserDataController, disabling the delete button if the userList is empty, and 
+     * setting an event handler to fill the userName TextField when an item is clicked in the adminList.
+    */
+    public void initialize()
+    {
         // Set the adminList to display the userList
         adminList.setItems(userList);
 
@@ -125,9 +152,11 @@ public class AdminController
         	deleteB.setDisable(true);
         }
         // Set an event handler to fill the userName TextField when an item is clicked
-        adminList.setOnMouseClicked(new EventHandler<MouseEvent>() {
+        adminList.setOnMouseClicked(new EventHandler<MouseEvent>() 
+        {
             @Override
-            public void handle(MouseEvent event) {
+            public void handle(MouseEvent event)
+            {
                 // Get the selected item from the ListView
                 String selectedItem = adminList.getSelectionModel().getSelectedItem();
 

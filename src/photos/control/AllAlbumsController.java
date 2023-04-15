@@ -1,5 +1,3 @@
-//disappear buttons when no photo in list - optional or add alerts
-//error handling left for rename and delete if no albums
 package photos.control;
 
 import java.io.IOException;
@@ -39,29 +37,34 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.converter.LocalDateStringConverter;
 
+/**
+ * This class is entry point when a user logsin. All the albums of a user will be displayed here.
+ * 
+ * @author Pavitra Patel, Huzaif Mansuri
+ */
 public class AllAlbumsController
 {
+	//data fields
     @FXML
     private ListView<String> allAlbumsList;
     public static ObservableList<String> albums;
-    
     @FXML
     private VBox displayAlbumDetails;
-    
     @FXML
     private Button renameB;
     @FXML
     private Button deleteB;
-    
     @FXML
     private Button searchByDateRange;
-
     @FXML
     private Button searchByTags;
-    
     private ObservableList<String> categories;
-	
     
+    /**
+     * This is the first method that will be executed after AllAlbums scene opens. The List View allAlbumsList is
+     * set to observable list albums. All the albums for that user are populated in the list. In the every row of List
+     * View, we update --
+     */
     public void start()
     {
     	albums = FXCollections.observableArrayList();

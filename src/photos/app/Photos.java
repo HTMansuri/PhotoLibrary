@@ -1,5 +1,3 @@
-//add support for enter and key pressed in listview
-
 package photos.app;
 
 import java.io.IOException;
@@ -15,10 +13,24 @@ import javafx.stage.Stage;
 import photos.control.LoginController;
 import photos.control.UserDataController;
 
+/**
+ * This class is the entry point for the Photos application.
+ * 
+ * @author Pavitra Patel, Huzaif Mansuri
+ */
 public class Photos extends Application 
 {
 	Stage mainStage;	
 	
+	/**
+	 * The start method is called when the application is launched. It loads the Login.fxml file and sets up the UI, 
+	 * sets up the stage, and displays it. It also sets up an event handler for the close button to prompt the user 
+	 * to confirm the exit operation. It also takes care of serializing and de-serializing data before the start and
+	 * and end of this method.
+	 *
+	 * @param primaryStage    the primary stage of the application
+	 * @throws Exception      if an error occurs while initializing the application
+	 */
 	@Override
 	public void start(Stage primaryStage) throws Exception
 	{
@@ -57,6 +69,12 @@ public class Photos extends Application
 		}
 	}
 
+	/**
+	 * The main method is the entry point for the application. It launches the application by calling the launch method
+	 * from the Application class.
+	 *
+	 * @param args 		command line arguments (not used)
+	 */
 	public static void main(String[] args)
 	{
 		launch(args);
